@@ -5,12 +5,11 @@ Hardware Used:
 
    - Pfsense box
    - ASUS mini PC (Proxmox with 2 worker nodes)
-   - Rasperrypi 3b+ (Master Node)
+   - Rasperrypi 3b+ (Tainted Master Node)
    - Cisco switch
    - Ubiquity AP
 
-
-Installation Steps:
+![#c5f015] Installation Steps:  `#c5f015`
 
 Step 1:
 ##K3s installation##
