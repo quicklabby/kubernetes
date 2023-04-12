@@ -46,6 +46,7 @@ Step 3:
 
 4. helm install --namespace=traefik traefik traefik/traefik --values=values.yaml
 
+Doc: https://artifacthub.io/packages/helm/traefik/traefik
 ----------------------------
 
 Step 4:
