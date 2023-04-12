@@ -9,7 +9,7 @@ Hardware Used:
    - Cisco switch
    - Ubiquity AP
 
-![#c5f015] Installation Steps:  `#c5f015`
+---- Installation Steps ----
 
 Step 1:
 ##K3s installation##
