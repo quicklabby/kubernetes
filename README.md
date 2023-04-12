@@ -23,7 +23,7 @@ The Rasperrypi 3B+ has a 128GB SD card installed with raspbian OS that act as a 
 Step 1:
 ##K3s installation##
 
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik" sh -  (Traefik is installed later via helm with custom values)
+```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik" sh -```  (Traefik is installed later via helm with custom values)
 
 ----------------------------
 
