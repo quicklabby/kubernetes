@@ -44,9 +44,9 @@ Step 3:
 
 3. kubectl create namespace traefik
 
-4. helm install --namespace=traefik traefik traefik/traefik --values=values.yaml
+4. helm install --namespace=traefik traefik traefik/traefik 
+   https://artifacthub.io/packages/helm/traefik/traefik
 
-Doc: https://artifacthub.io/packages/helm/traefik/traefik
 ----------------------------
 
 Step 4:
