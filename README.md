@@ -36,9 +36,13 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/confi
 Step 3:
 ###Traefik installation###
 
-1. kubectl create namespace traefik
+1. helm repo add traefik https://traefik.github.io/charts
 
-2. helm install --namespace=traefik traefik traefik/traefik --values=values.yaml
+2. helm repo update 
+
+3. kubectl create namespace traefik
+
+4. helm install --namespace=traefik traefik traefik/traefik --values=values.yaml
 
 ----------------------------
 
