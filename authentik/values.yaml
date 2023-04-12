@@ -1,0 +1,38 @@
+authentik:
+    secret_key: your_key (see helm authentik documentation)
+    error_reporting:
+        enabled: false
+    postgresql:
+        password: base64_encoded_password
+
+ingress:
+    enabled: true
+    hosts:
+        - host: authentik.yourdomain.com
+          paths:
+              - path: "/"
+                pathType: Prefix
+
+email:
+    enabled: true
+    host: smtp.youremaildomain.com
+    port: smpt_port
+    timeout: 30s
+    username: youremail
+    password: your_email_app_password
+    from: youremail
+
+service:
+    enabled: true
+    type: ClusterIP
+    port: 80
+    name: http
+    protocol: TCP
+    annotations:
+      kubernetes.io/ingress.class: traefik-external
+
+postgresql:
+    enabled: true
+    postgresqlPassword: base64_encoded_password
+redis:
+    enabled: true
