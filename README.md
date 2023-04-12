@@ -9,7 +9,9 @@ Hardware Used:
    - Cisco switch
    - Ubiquity AP
 
----- Installation Steps ----
+
+
+---- INSTALLATION STEPS ----
 
 Step 1:
 ##K3s installation##
