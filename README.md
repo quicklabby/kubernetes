@@ -1,4 +1,5 @@
-# Kubernetes 3 nodes Cluster Homelab
+# Kubernetes Cluster Homelab
+3 Nodes Cluster Homelab with Metallb via BGP and Traefik as Ingress Controller
 
 Hardware Used:
 
