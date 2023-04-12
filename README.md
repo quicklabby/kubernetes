@@ -1,5 +1,5 @@
 # Kubernetes Cluster Homelab
-###3 Nodes Cluster Homelab with Metallb via BGP and Traefik as Ingress Controller, with DNS challenge over Cloudflare ###
+###3 Nodes Cluster Homelab with Metallb via BGP and Traefik as Ingress Controller, with Cert Manager automated Letsencypt certificate and DNS challenge over Cloudflare ###
 
 Hardware Used:
 
