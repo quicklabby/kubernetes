@@ -42,7 +42,7 @@ Step 2:
 ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-frr.yaml -f bgpconfig.yaml```
 (bgpconfig values includes pfsense neightbor configuration for the metallb frr yaml)
 
-https://cert-manager.io/docs/installation/
+https://metallb.universe.tf/installation/
 
 ----------------------------
 
@@ -71,6 +71,8 @@ Step 4:
 
 3. Apply values:
 ```helm install cert-manager jetstack/cert-manager --namespace cert-manager --values=values.yaml --version v1.9.1```
+
+https://cert-manager.io/docs/installation/
 
 ----------------------------
 
