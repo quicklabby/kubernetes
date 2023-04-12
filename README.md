@@ -1,5 +1,5 @@
 # K3s Kubernetes Cluster Homelab
-3 Nodes Cluster with Metallb load balancer via BGP and Traefik as Ingress Controller. Cert Manager is use to automate Letsencypt certificate with a DNS challenge over Cloudflare
+3 Nodes Cluster with Metallb load balancer via BGP and Traefik as Ingress Controller. Cert Manager is use to automate Letsencypt certificate with DNS challenge over Cloudflare.
 
 Hardware Used:
 
