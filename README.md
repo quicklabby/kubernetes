@@ -47,7 +47,7 @@ https://metallb.universe.tf/installation/
 ----------------------------
 
 Step 3:
-###Traefik installation via helm###
+###Traefik installation via helm with customized values###
 
 1. ```helm repo add traefik https://traefik.github.io/charts```
 
@@ -82,7 +82,7 @@ Step 5:
 ----------------------------
 
 Step 6 (Optional):
-###Authentik installation via helm with ustomized values###
+###Authentik installation via helm with customized values###
 
 1. ```helm repo add authentik https://charts.goauthentik.io```
 2. ```helm repo update```
