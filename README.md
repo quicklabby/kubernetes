@@ -44,7 +44,7 @@ Step 3:
 
 3. ```kubectl create namespace traefik```
 
-4. ```helm install --namespace=traefik traefik traefik/traefik``` 
+4. ```helm install --namespace=traefik traefik traefik/traefik -f values.yaml``` 
    https://artifacthub.io/packages/helm/traefik/traefik
 
 ----------------------------
