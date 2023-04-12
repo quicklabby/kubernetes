@@ -30,7 +30,7 @@ Step 1:
 Step 2:
 ###Metallnstallation with BGP values file##
 
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-frr.yaml -f bgpconfig.yaml
+```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-frr.yaml -f bgpconfig.yaml```
 (bgpconfig values includes pfsense neightbor configuration for the metallb frr yaml)
 
 ----------------------------
@@ -38,13 +38,13 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/confi
 Step 3:
 ###Traefik installation###
 
-1. helm repo add traefik https://traefik.github.io/charts
+1. ```helm repo add traefik https://traefik.github.io/charts```
 
-2. helm repo update 
+2. ```helm repo update``` 
 
-3. kubectl create namespace traefik
+3. ```kubectl create namespace traefik```
 
-4. helm install --namespace=traefik traefik traefik/traefik 
+4. ```helm install --namespace=traefik traefik traefik/traefik``` 
    https://artifacthub.io/packages/helm/traefik/traefik
 
 ----------------------------
@@ -52,13 +52,13 @@ Step 3:
 Step 4:
 ###Certmanager Installation###
 
-1. kubectl create namespace cert-manager
+1. ```kubectl create namespace cert-manager```
 
 2. Install correct version:
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
+```kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml```
 
 3. Apply values:
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --values=values.yaml --version v1.9.1
+```helm install cert-manager jetstack/cert-manager --namespace cert-manager --values=values.yaml --version v1.9.1```
 
 ----------------------------
 
@@ -70,9 +70,9 @@ Step 5:
 Step 6 (Optional):
 - Authentik installation is done with helm and customized values:
 
-1. helm repo add authentik https://charts.goauthentik.io
-2. helm repo update
-3. helm upgrade --install authentik authentik/authentik -f values.yaml
+1. ```helm repo add authentik https://charts.goauthentik.io```
+2. ```helm repo update```
+3. ```helm upgrade --install authentik authentik/authentik -f values.yaml```
 
 https://goauthentik.io/docs/installation/kubernetes
 https://artifacthub.io/packages/helm/goauthentik/authentik
