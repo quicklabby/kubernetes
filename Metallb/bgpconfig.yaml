@@ -14,7 +14,7 @@ metadata:
   namespace: metallb-system
 spec:
   myASN: (needs to be setup in pfsense)
-  peerASN: 
+  peerASN: (needs to be setup in pfsense)
   peerAddress: 192.168.1.0 (metallb newtork of assigned DHCP addresses)
 ---
 apiVersion: metallb.io/v1beta1
