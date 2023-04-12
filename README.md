@@ -57,3 +57,9 @@ helm install cert-manager jetstack/cert-manager --namespace cert-manager --value
 
 Step 5:
 - Install Letsencrypt certificate for staging/production with cloudflare DNS
+
+----------------------------
+
+Step 6:
+- Authentik installation is done with helm and customized values:
+https://artifacthub.io/packages/helm/goauthentik/authentik
