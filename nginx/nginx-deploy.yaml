@@ -1,0 +1,79 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx
+  namespace: default
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        resources:
+          limits:
+            memory: "20Mi"
+#           cpu: "300m"
+          requests:
+            memory: "10Mi"
+#            cpu: "250m"
+        volumeMounts: 
+        - name: website
+          mountPath: /var/www/html
+        - name: webconfig
+          mountPath: /etc/nginx/conf.d
+      volumes:
+      - name: website
+        nfs:
+          server: nfs_server_ip
+          path:  /your/nfs/path/nginx/www
+      - name: webconfig
+        nfs:
+          server: nfs_server_ip
+          path: /your/nfs/path/nginx
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nginx
+  namespace: default
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`yourdomain.com`)
+      kind: Rule
+      services:
+        - name: nginx
+          port: 80
+      middlewares:
+        - name: default-headers
+  tls:
+    secretName: prod-yourdomain-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  selector:
+    app: nginx
+  ports:
+  - name: http
+    targetPort: 80
+    port: 80 
