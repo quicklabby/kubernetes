@@ -69,4 +69,10 @@ Step 5:
 
 Step 6 (Optional):
 - Authentik installation is done with helm and customized values:
+
+1. helm repo add authentik https://charts.goauthentik.io
+2. helm repo update
+3. helm upgrade --install authentik authentik/authentik -f values.yaml
+
+https://goauthentik.io/docs/installation/kubernetes
 https://artifacthub.io/packages/helm/goauthentik/authentik
