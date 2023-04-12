@@ -5,11 +5,13 @@ Hardware Used:
 
    - Pfsense box
    - ASUS mini PC (Proxmox with 2 vm as worker nodes)
-   - Rasperrypi 3b+ (Tainted Master Node)
+   - Raspberrypi 3B+ (Tainted Master Node)
    - Cisco switch
    - Ubiquity AP
 
-
+This is a small project I created to learn kubernetes with only one powerful Asus mini PC and an old Raspberrypi 3B+.
+The Asus mini PC has 32GB of RAM shared with Proxmox running 2 VM with Oracle Linux installed and 14GB RAM allocated for each node.
+The Rasperrypi 3B+ has a 128GB SD card installed with raspbian OS that act as a tainted master node as all the pods are allocated in the workers nodes only.
 
 ---- INSTALLATION STEPS ----
 
