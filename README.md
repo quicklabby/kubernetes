@@ -33,6 +33,7 @@ Step 1:
 curl -sfL https://get.k3s.io | K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken sh -
 
 https://docs.k3s.io/quick-start
+
 ----------------------------
 
 Step 2:
