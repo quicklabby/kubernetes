@@ -1,5 +1,4 @@
-# Kubernetes
-Kubernetes Cluster Homelab
+# Kubernetes 3 nodes Cluster Homelab
 
 Hardware Used:
 
