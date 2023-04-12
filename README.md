@@ -60,6 +60,6 @@ Step 5:
 
 ----------------------------
 
-Step 6:
+Step 6 (Optional):
 - Authentik installation is done with helm and customized values:
 https://artifacthub.io/packages/helm/goauthentik/authentik
