@@ -56,7 +56,7 @@ helm install cert-manager jetstack/cert-manager --namespace cert-manager --value
 ----------------------------
 
 Step 5:
-- Install Letsencrypt certificate for staging/production with cloudflare DNS
+- Deploy Letsencrypt certificate for staging/production with cloudflare DNS
 
 ----------------------------
 
