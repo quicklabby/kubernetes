@@ -30,7 +30,7 @@ Step 1:
 ```cat /var/lib/rancher/k3s/server/node-token```
 
 3. Install K3s on the worker nodes:
-curl -sfL https://get.k3s.io | K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken sh -
+```curl -sfL https://get.k3s.io | K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken sh -```
 
 https://docs.k3s.io/quick-start
 
