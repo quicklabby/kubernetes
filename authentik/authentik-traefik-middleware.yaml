@@ -1,10 +1,12 @@
+### (this settings will be generated automatically by authentik, see documentation) ###
+
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
     name: authentik
 spec:
     forwardAuth:
-        address: https://domain_you_want_authentik_to_protect.yourdomain.com/outpost.goauthentik.io/auth/traefik  (this will be generated automatically in authentik settings, see documentation)
+        address: https://domain_you_want_authentik_to_protect.yourdomain.com/outpost.goauthentik.io/auth/traefik 
         trustForwardHeader: true
         authResponseHeaders:
             - X-authentik-username
