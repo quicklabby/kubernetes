@@ -10,4 +10,4 @@ spec:
     kind: ClusterIssuer
   dnsNames:
   - "yourdomain.com"
-  - "*.yourdomain.com"
+  - "*.yourdomain.com" (add this if you want to create a wildcard)
