@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: yourdomain.com
+  namespace: default
+spec:
+  secretName: prod-yourdomain-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+  - "yourdomain.com"
+  - "*.yourdomain.com" (add this if you want to create a wildcard)
