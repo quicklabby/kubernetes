@@ -23,8 +23,16 @@ The Rasperrypi 3B+ has a 128GB SD card installed with raspbian OS that act as a 
 Step 1:
 ##K3s installation##
 
+1. Install K3s on the master node :
 ```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik" sh -```  (Traefik is installed later via helm with custom values)
 
+2. Get your token for worker nodes deployment:
+```cat /var/lib/rancher/k3s/server/node-token```
+
+3. Install K3s on the worker nodes:
+curl -sfL https://get.k3s.io | K3S_URL=https://myserver:6443 K3S_TOKEN=mynodetoken sh -
+
+https://docs.k3s.io/quick-start
 ----------------------------
 
 Step 2:
@@ -45,7 +53,8 @@ Step 3:
 3. ```kubectl create namespace traefik```
 
 4. ```helm install --namespace=traefik traefik traefik/traefik -f values.yaml``` 
-   https://artifacthub.io/packages/helm/traefik/traefik
+   
+https://artifacthub.io/packages/helm/traefik/traefik
 
 ----------------------------
 
