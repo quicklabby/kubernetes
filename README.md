@@ -21,7 +21,7 @@ The Rasperry Pi 3B+ has a 128GB SD card installed with raspbian OS that act as a
 ---- INSTALLATION STEPS ----
 
 Step 1:
-##K3s installation##
+  K3s installation
 
 1. Install K3s on the master node :
 ```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik" sh -```  (Traefik will be installed later via helm with custom values)
@@ -37,7 +37,7 @@ https://docs.k3s.io/quick-start
 ----------------------------
 
 Step 2:
-###Metallnstallation with BGP values file##
+   Metallnstallation with BGP values file
 
 ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-frr.yaml -f bgpconfig.yaml```
 (bgpconfig values includes pfsense neightbor configuration for the metallb frr yaml)
@@ -47,7 +47,7 @@ https://metallb.universe.tf/installation/
 ----------------------------
 
 Step 3:
-###Traefik installation via helm with customized values###
+   Traefik installation via helm with customized values
 
 1. ```helm repo add traefik https://traefik.github.io/charts```
 
@@ -62,7 +62,7 @@ https://artifacthub.io/packages/helm/traefik/traefik
 ----------------------------
 
 Step 4:
-###Certmanager Installation###
+   Certmanager Installation
 
 1. ```kubectl create namespace cert-manager```
 
@@ -77,12 +77,12 @@ https://cert-manager.io/docs/installation/
 ----------------------------
 
 Step 5:
-###Deploy Letsencrypt certificate for staging/production with cloudflare DNS###
+   Deploy Letsencrypt certificate for staging/production with cloudflare DNS
 
 ----------------------------
 
 Step 6 (Optional):
-###Authentik installation via helm with customized values###
+   Authentik installation via helm with customized values
 
 1. ```helm repo add authentik https://charts.goauthentik.io```
 2. ```helm repo update```
