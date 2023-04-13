@@ -1,0 +1,78 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: heimdall
+  namespace: default
+  labels:
+    app: heimdall
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: heimdall
+  template:
+    metadata:
+      labels:
+        app: heimdall
+    spec:
+      containers:
+      - env:
+        - name: PGID
+          value: "1000"
+        - name: PUID
+          value: "1000"
+        - name: TZ
+          value: Europe/London
+        name: heimdall
+        image: lscr.io/linuxserver/heimdall:latest
+        resources:
+          limits:
+            memory: "100Mi"
+#           cpu: "250m"
+          requests:
+            memory: "80Mi"
+#           cpu: "150m"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        nfs:
+          server: ##nfs_volume_IP
+          path: /heimdall/persistant/volume/path
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: heimdall
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure                                                                                                                                                                                                                                   routes:                                                                                                                                                                                                                                           - match: Host(`home.explanet.xyz`)
+      kind: Rule
+      services:
+        - name: heimdall
+          port: ##traefik_chosen_port
+      middlewares:
+        - name: default-headers
+  tls:
+    secretName: prod-yourdomain-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: heimdall
+  namespace: default
+spec:
+  selector:
+    app: heimdall
+  ports:
+  - name: http
+    targetPort: 80
+    port: ##traefik_chosen_port
