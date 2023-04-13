@@ -37,7 +37,7 @@ https://docs.k3s.io/quick-start
 ----------------------------
 
 Step 2:
-   Metallnstallation with BGP values file
+   Metallb Installation with BGP values file
 
 ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-frr.yaml -f bgpconfig.yaml```
 (bgpconfig values includes pfsense neightbor configuration for the metallb frr yaml)
