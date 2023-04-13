@@ -57,7 +57,7 @@ spec:
         - name: mariadb-data
           nfs:
             server: nfs_volume_IP
-            path: /your/db/path/volume
+            path: /mariadb/persistent/volume/path
 
 ---
 
