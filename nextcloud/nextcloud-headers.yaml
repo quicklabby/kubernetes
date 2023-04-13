@@ -1,0 +1,31 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: default-headers
+  namespace: nextcloud
+spec:
+  headers:
+    browserXssFilter: true
+    contentTypeNosniff: true
+    forceSTSHeader: true
+    frameDeny: true
+    referrerPolicy: "no-referrer"
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 15552000
+    permissionsPolicy: "geolocation=(self), microphone=(), camera=(), fullscreen=*"
+    customFrameOptionsValue: SAMEORIGIN
+    customRequestHeaders:
+      X-Forwarded-Proto: https
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: nextcloud-redirectregex
+  namespace: nextcloud
+spec:
+  redirectRegex:
+    regex: "https://your.nextcloudomain.com/.well-known/(card|cal)dav"
+    replacement: "https://your.nextcloudomain.com/remote.php/dav/"
+    permanent: true
