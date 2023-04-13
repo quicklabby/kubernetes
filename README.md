@@ -77,7 +77,7 @@ https://cert-manager.io/docs/installation/
 ----------------------------
 
 Step 5:
-- Deploy Letsencrypt certificate for staging/production with cloudflare DNS
+###Deploy Letsencrypt certificate for staging/production with cloudflare DNS###
 
 ----------------------------
 
