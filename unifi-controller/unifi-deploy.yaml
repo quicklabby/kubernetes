@@ -1,0 +1,111 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: unifi
+  namespace: default
+  labels:
+    app: unifi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unifi
+  template:
+    metadata:
+      labels:
+        app: unifi
+    spec:
+      containers:
+      - env:
+        - name: PGID
+          value: "1000"
+        - name: PUID
+          value: "1000"
+        - name: MEM_LIMIT
+          value: "1024"
+        - name: MEM_STARTUP
+          value: "1024"                                                                                                                                                                                                                                 name: unifi                                                                                                                                                                                                                                     image: linuxserver/unifi-controller:latest
+        ports:
+        - name: device-comm
+          containerPort: 8080
+          protocol: TCP
+        - name: stun
+          containerPort: 3478
+          protocol: UDP
+        - name: default-console
+          containerPort: 8443
+          protocol: TCP
+        - name: secure-redirect
+          containerPort: 8843
+          protocol: TCP
+        - name: http-redirect
+          containerPort: 8880
+          protocol: TCP
+        - name: speedtest
+          containerPort: 6789
+          protocol: TCP
+        - name: unifi-disc
+          containerPort: 10001
+          protocol: UDP
+        - name: unifi-disc-l2
+          containerPort: 1900
+          protocol: UDP
+        - name: syslog-port
+          containerPort: 5514
+          protocol: UDP
+        resources:
+          limits:
+            memory: "900Mi"
+#           cpu: "250m"
+          requests:
+            memory: "500Mi"
+#           cpu: "200m"
+        volumeMounts:
+        - name: apconfig
+          mountPath: /config
+      volumes:
+      - name: apconfig
+        nfs:
+          server: ##nfs_volume_IP
+          path: /unifi/persistant/volume/path
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi
+  namespace: default
+spec:
+  selector:
+    app: unifi
+  ports:
+    - name: device-comm
+      port: 8080
+      protocol: TCP
+    - name: stun
+      port: 3478
+      protocol: UDP
+    - name: default-console
+      port: 8443
+      protocol: TCP
+    - name: secure-redirect
+      port: 8843
+      protocol: TCP
+    - name: http-redirect
+      port: 8880
+      protocol: TCP
+    - name: speedtest
+      port: 6789
+      protocol: TCP
+    - name: unifi-disc
+      port: 10001
+      protocol: UDP
+    - name: unifi-disc-l2
+      port: 1900
+      protocol: UDP
+    - name: syslog-port
+      port: 5514
+      protocol: UDP
+  externalIPs:
+    - ##add traefik ingress IP here if no domain will be used##
