@@ -64,7 +64,7 @@ spec:
       volumes:
       - name: config
         nfs:
-          server: nfs_volume_IP
+          server: ##nfs_volume_IP
           path: /plex/persistant/path/volume
 ---
 
