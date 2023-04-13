@@ -73,19 +73,19 @@ spec:
       volumes:
       - name: apps
         nfs:
-          server: nfs_volume_IP
+          server: ##nfs_volume_IP
           path: /your/persistant/nextcloud/path
       - name: config
         nfs:
-          server: nfs_volume_IP
+          server: ##nfs_volume_IP
           path: /your/persistant/nextcloud/path
       - name: data
         nfs:
-          server: nfs_volume_IP
+          server: ##nfs_volume_IP
           path: /your/persistant/nextcloud/path
       - name: html
         nfs:
-          server: nfs_volume_IP
+          server: ##nfs_volume_IP
           path: /your/persistant/nextcloud/path
 
 ---
@@ -105,7 +105,7 @@ spec:
       kind: Rule
       services:
         - name: nextcloud
-          port: chosen_traefik_port
+          port: ##chosen_traefik_port
       middlewares:
         - name: default-headers
         - name: nextcloud-redirectregex
@@ -125,4 +125,4 @@ spec:
   ports:
   - name: http
     targetPort: 80
-    port: chosen_traefik_port
+    port: ##chosen_traefik_port
