@@ -1,0 +1,52 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: influxdb
+  namespace: monitoring
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+        - name: influxdb
+          image: influxdb:2.6.1-alpine
+          resources:
+            limits:
+              memory: "600Mi"
+#           cpu: "250m"
+            requests:
+              memory: "500Mi"
+#           cpu: "150m"
+          volumeMounts:
+          - name: config
+            mountPath: /var/lib/influxdb2
+      volumes:
+      - name: config
+        nfs:
+          server: #nfs_volume_IP
+          path: /influxdb2/persistent/volume/path
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+  namespace: monitoring
+spec:
+  selector:
+    app: influxdb
+  ports:
+  - name: http
+    targetPort: 8086
+    port: 8086
+  externalIPs:
+    - ##Traefik_ingress_IP
