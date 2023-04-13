@@ -47,7 +47,7 @@ spec:
           value: nextlcoud.domain.com
         image: nextcloud:latest
         name: nextcloud
-        lifecycle: (optional ##should run a cronjob for nextcloud with apache browser##)
+        lifecycle: ##Optional: should run a cronjob for nextcloud with apache browser##
           postStart:
             exec:
               command:
