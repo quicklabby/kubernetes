@@ -1,0 +1,107 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: grafana
+  namespace: monitoring
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+      - image: grafana/grafana:latest
+        name: grafana
+        env:
+        - name: GF_PATHS_DATA
+          value: "/var/lib/grafana"
+        - name: GF_DEFAULT_INSTANCE_NAME
+          value: "home"
+        - name: TZ
+          value: "Europe/London"
+        - name: GF_ANALYTICS_REPORTING_ENABLED
+          value: "false"
+        - name: GF_SERVER_ENABLE_GZIP
+          value: "true"
+        - name: GF_INSTALL_PLUGINS
+          value: "grafana-clock-panel,grafana-simple-json-datasource,natel-plotly-panel,grafana-worldmap-panel,grafana-piechart-panel"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /robots.txt
+            port: 3000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 2
+        resources:
+          limits:
+#           cpu: 200m
+            memory: 200Mi
+          requests:
+#           cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - name: config
+          mountPath: /var/lib/grafana
+      volumes:
+      - name: config
+        nfs:
+          path: /grafana/persistent/volume/path
+          server: ##nfs_volume_IP
+
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana
+  namespace: monitoring
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`grafana.domain.com`)
+      kind: Rule
+      services:
+        - name: grafana
+          port: #chosen_traefik_port
+      middlewares:
+        - name: default-headers
+  tls:
+   secretName: prod-yourdomain-tls
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  selector:
+    app: grafana
+  ports:
+    - name: http
+      targetPort: 3000
+      port: #chosen_traefik_port
