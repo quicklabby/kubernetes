@@ -34,11 +34,11 @@ spec:
       - name: website
         nfs:
           server: nfs_volume_ip
-          path:  /your/nfs/path/nginx/www
+          path:  /your/persistant/nginx/path
       - name: webconfig
         nfs:
           server: nfs_volume_ip
-          path: /your/nfs/path/nginx
+          path: /your/persistant/nginx/path
 
 ---
 
