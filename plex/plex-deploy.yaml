@@ -1,0 +1,105 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: plex
+  namespace: default
+  labels:
+    app: plex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plex
+  template:
+    metadata:
+      labels:
+        app: plex
+    spec:
+      containers:
+      - env:
+        - name: PLEX_CLAIM
+          value: #plex_claim_token
+        - name: PGID
+          value: "1000"
+        - name: PUID
+          value: "1000"
+        - name: TZ
+          value: europe/London
+        image: plexinc/pms-docker:latest
+        name: plex
+        ports:
+        - containerPort: 32400
+          name: http
+          protocol: TCP
+        - containerPort: 32469
+          name: dlna-tcp
+          protocol: TCP
+        - containerPort: 1900
+          name: dlna-udp
+          protocol: UDP
+        - containerPort: 3005
+          name: plex-companion
+          protocol: TCP
+        - containerPort: 5353
+          name: discovery-udp
+          protocol: UDP
+        - containerPort: 32410
+          name: gdm1-32410
+          protocol: UDP
+        - containerPort: 32412
+          name: gdm2-32410
+          protocol: UDP                                                                                                                                                                                                                                 - containerPort: 32413                                                                                                                                                                                                                            name: gdm3-32413
+          protocol: UDP
+        - containerPort: 32414                                                                                                                                                                                                                            name: gdm4-32414
+        resources:
+          limits:
+            memory: "1500Mi"
+#           cpu: "800m"
+          requests:
+            memory: "1000Mi"
+#           cpu: "500m"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        nfs:
+          server: nfs_volume_IP
+          path: /plex/persistant/path/volume
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: plex
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`plex.domain.com`)
+      kind: Rule
+      services:
+        - name: plex
+          port: 32400
+      middlewares:
+        - name: default-headers
+  tls:
+    secretName: prod-yourdomain-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: plex
+  namespace: default
+spec:
+  selector:
+    app: plex
+  ports:
+  - name: http
+    targetPort: 32400
+    port: 32400
