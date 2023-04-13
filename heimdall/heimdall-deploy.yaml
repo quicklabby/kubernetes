@@ -39,7 +39,7 @@ spec:
       - name: config
         nfs:
           server: ##nfs_volume_IP
-          path: /heimdall/persistant/volume/path
+          path: /heimdall/persistent/volume/path
 
 ---
 
