@@ -22,7 +22,7 @@ spec:
         - name: PUID
           value: "1000"
         - name: TZ
-          value: Asia/Tokyo
+          value: Europe/London
         name: tautulli
         image: lscr.io/linuxserver/tautulli:latest
         resources:
