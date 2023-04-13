@@ -1,0 +1,128 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+  labels:
+    app: nextcloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud
+  template:
+    metadata:
+      labels:
+        app: nextcloud
+    spec:
+      containers:
+      - env:
+        - name: REDIS_HOST
+          value: redis
+        - name: MYSQL_HOST
+          value: mariadb
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_DATABASE
+              name: mariadb-secrets
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_PASSWORD
+              name: mariadb-secrets
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_USER
+              name: mariadb-secrets
+        - name: NEXTCLOUD_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_PASSWORD
+              name: mariadb-secrets
+        - name: NEXTCLOUD_ADMIN_USER
+          value: "admin"
+        - name: NEXTCLOUD_TRUSTED_DOMAINS
+          value: nextlcoud.domain.com
+        image: nextcloud:latest
+        name: nextcloud
+        lifecycle: (optional ##should run a cronjob for nextcloud with apache browser##)
+          postStart:
+            exec:
+              command:
+              - "sh"
+              - "-c"
+              - "apt-get update && apt-get install -y openrc && start-stop-daemon --start --background --pidfile /cron.pid --exec /cron.sh"
+        resources:
+          limits:
+            memory: "1000Mi"
+#            cpu: "500m"
+          requests:
+            memory: "800Mi"
+#            cpu: "300m"
+        volumeMounts:
+        - name: apps
+          mountPath: /var/www/html/custom_apps
+        - name: config
+          mountPath: /var/www/html/config
+        - name: data
+          mountPath: /var/www/html/data
+        - name: html
+          mountPath: /var/www/html
+      volumes:
+      - name: apps
+        nfs:
+          server: nfs_volume_IP
+          path: /your/persistant/nextcloud/path
+      - name: config
+        nfs:
+          server: nfs_volume_IP
+          path: /your/persistant/nextcloud/path
+      - name: data
+        nfs:
+          server: nfs_volume_IP
+          path: /your/persistant/nextcloud/path
+      - name: html
+        nfs:
+          server: nfs_volume_IP
+          path: /your/persistant/nextcloud/path
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`nextcloud.domain.com`)
+      kind: Rule
+      services:
+        - name: nextcloud
+          port: chosen_traefik_port
+      middlewares:
+        - name: default-headers
+        - name: nextcloud-redirectregex
+  tls:
+    secretName: prod-yourdomain-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+spec:
+  selector:
+    app: nextcloud
+  ports:
+  - name: http
+    targetPort: 80
+    port: chosen_traefik_port
