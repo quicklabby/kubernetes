@@ -1,0 +1,87 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: tautulli
+  namespace: default
+  labels:
+    app: tautulli
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tautulli
+  template:
+    metadata:
+      labels:
+        app: tautulli
+    spec:
+      containers:
+      - env:
+        - name: PGID
+          value: "1000"
+        - name: PUID
+          value: "1000"
+        - name: TZ
+          value: Asia/Tokyo
+        name: tautulli
+        image: lscr.io/linuxserver/tautulli:latest
+        resources:
+          limits:
+            memory: "200Mi"
+#           cpu: "300m"
+          requests:
+            memory: "150Mi"
+#           cpu: "250m"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: logs
+          mountPath: /logs
+      volumes:
+      - name: config
+        nfs:
+          server: ##nfs_volume_IP
+          path: /tautulli/persistent/volume/path
+      - name: logs
+        nfs:
+          server: ##nfs_volume_IP
+          path: /tautulli/persistent/volume/path
+
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: tautulli
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`tautulli.domain.com`)
+      kind: Rule
+      services:
+        - name: tautulli
+          port: #chosen_traefik_port
+      middlewares:
+        - name: default-headers
+  tls:
+    secretName: prod-explanet-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: tautulli
+  namespace: default
+spec:
+  selector:
+    app: tautulli
+  ports:
+  - name: http
+    targetPort: 8181
+    port: #chosen_traefik_port
