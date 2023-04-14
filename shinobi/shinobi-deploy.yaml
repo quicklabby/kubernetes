@@ -1,0 +1,92 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: shinobi
+  namespace: security
+  labels:
+    app: shinobi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shinobi
+  template:
+    metadata:
+      labels:
+        app: shinobi
+    spec:
+      containers:
+      - env:
+        - name: PGID
+          value: "1000"
+        - name: PUID
+          value: "1000"
+        - name: TZ
+          value: Europe/London
+        name: shinobi
+        image: migoller/shinobidocker:latest
+        resources:
+          limits:
+            memory: "300Mi"
+#           cpu: "200m"
+          requests:
+            memory: "100Mi"
+#           cpu: "150m"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: videos
+          mountPath: /videos
+        - name: streams
+          mountPath: /dev/shm/shinobiDockerTemp
+      volumes:
+      - name: config
+        nfs:
+          server: #nfs_volume_IP
+          path: /shinobi/persistent/volume/path
+      - name: videos
+        nfs:
+          server: #nfs_volume_IP
+          path: /shinobi/persistent/volume/path
+      - name: streams
+        nfs:
+          server: #nfs_volume_IP
+          path: /shinobi/persistent/volume/path
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: shinobi
+  namespace: security
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`shinobi.domain.com`)
+      kind: Rule
+      services:
+        - name: shinobi
+          port: #chosen_traefik_port
+      middlewares:
+        - name: security-headers
+  tls:
+    secretName: prod-yourdomain-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: shinobi
+  namespace: security
+spec:
+  selector:
+    app: shinobi
+  ports:
+  - name: http
+    targetPort: 8080
+    port: #chosen_traefik_port
