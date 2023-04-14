@@ -16,3 +16,4 @@ spec:
     permissionsPolicy: "geolocation=(self), microphone=(), camera=(), fullscreen=*"
     customFrameOptionsValue: SAMEORIGIN
     customRequestHeaders:
+      X-Forwarded-Proto: https
