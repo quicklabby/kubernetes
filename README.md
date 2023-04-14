@@ -81,7 +81,7 @@ Step 5:
    
 1. Install ```certmanager-secret.yaml``` manifest with your DNS Cloudflare token
 
-2. Deploy  ```prod-deploy.yaml``` and ```yourdomain-prod-deploy.yaml``` with your chosen domain (for testing only, you can use the ```staging-deploy.yaml``` and ```yourdomain-stage-deploy.yaml```)
+2. Deploy  ```prod-deploy.yaml``` and ```yourdomain-prod-deploy.yaml``` with your chosen domain (for testing purposes, you can use the ```staging-deploy.yaml``` and ```yourdomain-stage-deploy.yaml```)
 
 ----------------------------
 
