@@ -1,0 +1,18 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: security-headers
+  namespace: security
+spec:
+  headers:
+    browserXssFilter: true
+    contentTypeNosniff: true
+    forceSTSHeader: true
+    frameDeny: true
+    referrerPolicy: "no-referrer"
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 15552000
+    permissionsPolicy: "geolocation=(self), microphone=(), camera=(), fullscreen=*"
+    customFrameOptionsValue: SAMEORIGIN
+    customRequestHeaders:
