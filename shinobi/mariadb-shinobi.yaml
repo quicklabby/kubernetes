@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  namespace: security
+  labels:
+    app: mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:10.6
+        ports:
+          - containerPort: 3306
+        resources:
+          limits:
+            memory: "150Mi"
+#           cpu: "300m"
+          requests:
+            memory: "50Mi"
+#           cpu: "250m"
+        args:
+          - --transaction-isolation=READ-COMMITTED
+          - --binlog-format=ROW
+          - --max-connections=1000
+        env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  key: MYSQL_DATABASE
+                  name: mariadb-secrets
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: MYSQL_PASSWORD
+                  name: mariadb-secrets
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  key: MYSQL_USER
+                  name: mariadb-secrets
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: MYSQL_ROOT_PASSWORD
+                  name: mariadb-secrets
+        volumeMounts:
+        - name: mariadb-data
+          mountPath: /mariadb/persistent/volume/path
+      volumes:
+        - name: mariadb-data
+          nfs:
+            server: #nfs_volume_IP
+            path: /mariadb/persistent/volume/path
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb
+  namespace: security
+  labels:
+    app: mariadb
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mariadb
