@@ -37,7 +37,7 @@ https://docs.k3s.io/quick-start
 ----------------------------
 
 Step 2:
-   Metallb Installation with BGP values file
+   Install Metallb desired version with BGP values file 
 
 ```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-frr.yaml -f bgpconfig.yaml```
 (bgpconfig values includes pfsense neightbor configuration for the metallb frr yaml)
@@ -66,7 +66,7 @@ Step 4:
 
 1. ```kubectl create namespace cert-manager```
 
-2. Install the preferred version:
+2. Install the desired version:
 ```kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml```
 
 3. Apply values:
