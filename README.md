@@ -66,7 +66,7 @@ Step 4:
 
 1. ```kubectl create namespace cert-manager```
 
-2. Install correct version:
+2. Install the preferred version:
 ```kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml```
 
 3. Apply values:
