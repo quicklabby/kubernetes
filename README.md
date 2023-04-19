@@ -19,7 +19,8 @@ The Rasperry Pi 3B+ has a 128GB SD card installed and acts as a tainted master n
 Webserver:
 - Nginx
 
-Reverse proxy/SSL/Auth:
+LoadBalancer/Ingress/SSL/Auth:
+- Metallb
 - Traefik
 - Cert-manager 
 - Authentik
@@ -30,6 +31,7 @@ Media/Cloud:
 - Nextcloud
 
 Utilities/tools:
+- Heimdall 
 - Ubiquity Unifi Controller
 - Webtop
 - Shinobi 
