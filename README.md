@@ -36,6 +36,9 @@ Utilities/tools:
 - Webtop
 - Shinobi 
 
+Database:
+- Mariadb
+
 Monitoring/Logs:
 - InfluxDB
 - Grafana
