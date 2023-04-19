@@ -16,6 +16,30 @@ All the pods persistent data is retained in an external 256GB NVME volume attach
 The external NVME is attached to Proxmox and the worker nodes as a NFS volume.
 The Rasperry Pi 3B+ has a 128GB SD card installed and acts as a tainted master node as all the pods are scheduled in the workers nodes only.
 
+Webserver:
+Nginx
+
+Reverse proxy/SSL/Auth:
+Traefik
+Cert-manager 
+Authentik
+
+Media/Cloud:
+Plex
+Tautulli
+Nextcloud
+
+Utilities/tools:
+Ubiquity Unifi Controller
+Webtop
+Shinobi 
+
+Monitoring/Logs:
+InfluxDB
+Grafana
+Prometheus
+Node Exporter
+
 ----------------------------
 
 ---- INSTALLATION STEPS ----
