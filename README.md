@@ -17,28 +17,28 @@ The external NVME is attached to Proxmox and the worker nodes as a NFS volume.
 The Rasperry Pi 3B+ has a 128GB SD card installed and acts as a tainted master node as all the pods are scheduled in the workers nodes only.
 
 Webserver:
-Nginx
+- Nginx
 
 Reverse proxy/SSL/Auth:
-Traefik
-Cert-manager 
-Authentik
+- Traefik
+- Cert-manager 
+- Authentik
 
 Media/Cloud:
-Plex
-Tautulli
-Nextcloud
+- Plex
+- Tautulli
+- Nextcloud
 
 Utilities/tools:
-Ubiquity Unifi Controller
-Webtop
-Shinobi 
+- Ubiquity Unifi Controller
+- Webtop
+- Shinobi 
 
 Monitoring/Logs:
-InfluxDB
-Grafana
-Prometheus
-Node Exporter
+- InfluxDB
+- Grafana
+- Prometheus
+- Node Exporter
 
 ----------------------------
 
