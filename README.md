@@ -36,7 +36,7 @@ Utilities/tools:
 - Webtop
 - Shinobi 
 
-Database:
+Applications Database:
 - Mariadb
 
 Monitoring/Logs:
