@@ -12,7 +12,7 @@ spec:
         - argo.domain.com
       secretName: prod-domain-tls
   rules:
-    - host: argo.explanet.xyz
+    - host: argo.domain.com
       http:
         paths:
           - path: /
