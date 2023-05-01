@@ -53,7 +53,7 @@ Step 1:
   K3s installation
 
 1. Install K3s on the master node :
-```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik" sh -```  (Traefik will be installed later via helm with custom values)
+```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik,servicelb" sh -```  (Traefik will be installed later via helm with custom values)
 
 2. Get your token for worker nodes deployment:
 ```cat /var/lib/rancher/k3s/server/node-token```
