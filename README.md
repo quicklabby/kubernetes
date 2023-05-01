@@ -44,6 +44,7 @@ Monitoring/Logs:
 - Grafana
 - Prometheus
 - Node Exporter
+- Telegraf
 
 CI/CD
 - ArgoCD
