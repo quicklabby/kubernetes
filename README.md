@@ -45,7 +45,7 @@ Monitoring/Logs:
 - Prometheus
 - Node Exporter
 
-CD/CI
+CI/CD
 - ArgoCD
 
 ----------------------------
