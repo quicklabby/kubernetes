@@ -1,7 +1,6 @@
 configs:
   params:
-    # Run server without TLS
-    # Traefik finishes TLS connections
+    # Run server without TLS as we will use Traefik #
     server.insecure: true
   cm:
     statusbadge.enabled: 'true'
