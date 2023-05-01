@@ -127,6 +127,7 @@ Step 6 (Optional):
 https://goauthentik.io/docs/installation/kubernetes
 https://artifacthub.io/packages/helm/goauthentik/authentik
 
+----------------------------
 
 Step 7 (Optional):
    Install ArgoCD via helm with customized values
