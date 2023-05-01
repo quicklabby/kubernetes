@@ -45,6 +45,9 @@ Monitoring/Logs:
 - Prometheus
 - Node Exporter
 
+CD/CI
+- ArgoCD
+
 ----------------------------
 
 ---- INSTALLATION STEPS ----
@@ -123,3 +126,13 @@ Step 6 (Optional):
 
 https://goauthentik.io/docs/installation/kubernetes
 https://artifacthub.io/packages/helm/goauthentik/authentik
+
+
+Step 7 (Optional):
+   Install ArgoCD via helm with customized values
+   
+1. ```helm repo add argo https://argoproj.github.io/argo-helm```
+2. ```helm repo update```
+3. ```kubectl create namespace argocd```
+4. ```helm install argocd argo/argo-cd  --namespace argocd -f argocd-values.yml```
+5. Apply traefik ingress
