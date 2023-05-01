@@ -40,8 +40,8 @@ Applications Database:
 - Mariadb
 
 Monitoring/Logs:
-- InfluxDB
 - Grafana
+- InfluxDB
 - Prometheus
 - Node Exporter
 - Telegraf
