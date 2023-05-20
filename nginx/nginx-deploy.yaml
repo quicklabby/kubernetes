@@ -33,11 +33,11 @@ spec:
       volumes:
       - name: website
         nfs:
-          server: {{ SERVER_IP }}
+          server: SERVER_IP
           path:  /your/persistant/nginx/path
       - name: webconfig
         nfs:
-          server: {{ SERVER_IP }}
+          server: SERVER_IP
           path: /your/persistant/nginx/path
 
 ---
