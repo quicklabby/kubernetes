@@ -34,10 +34,10 @@ spec:
       - name: website
         nfs:
           server: SERVER_IP
-          path:  WWW_PATH
+          path:  /WWW_PATH
       - name: webconfig
         nfs:
-          server: SERVER_IP
+          server: /SERVER_IP
           path: NGINX_PATH
 
 ---
