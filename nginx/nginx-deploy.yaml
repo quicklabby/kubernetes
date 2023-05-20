@@ -33,12 +33,12 @@ spec:
       volumes:
       - name: website
         nfs:
-          server: {{ SERVER_IP }}
-          path:  {{ /WWW_PATH }}
+          server: SERVER_IP
+          path:  /WWW_PATH
       - name: webconfig
         nfs:
-          server: {{ SERVER_IP }}
-          path: {{ /NGINX_PATH }}
+          server: SERVER_IP
+          path: /NGINX_PATH
 
 ---
 
