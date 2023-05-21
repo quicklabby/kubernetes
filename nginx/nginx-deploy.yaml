@@ -25,6 +25,9 @@ spec:
           requests:
             memory: "10Mi"
 #            cpu: "250m"
+     envFrom:
+       - configMapRef:
+         name: argocd-env
         volumeMounts: 
         - name: website
           mountPath: /var/www/html
