@@ -37,11 +37,11 @@ spec:
       - name: website
         nfs:
           server: SERVER_IP
-          path:  PATH_WWW
+          path:  /persistant/path/www
       - name: webconfig
         nfs:
           server: server_ip
-          path: PATH_NGINX
+          path: /persistant/path/nginx
 
 ---
 
