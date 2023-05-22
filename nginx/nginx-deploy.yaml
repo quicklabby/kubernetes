@@ -33,7 +33,7 @@ spec:
       volumes:
       - name: website
         nfs:
-          server: SERVER_IP
+          server: server_ip
           path:  /persistant/path/www
       - name: webconfig
         nfs:
