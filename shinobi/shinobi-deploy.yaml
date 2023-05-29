@@ -30,7 +30,7 @@ spec:
             memory: "300Mi"
 #           cpu: "200m"
           requests:
-            memory: "100Mi"
+            memory: "250Mi"
 #           cpu: "150m"
         volumeMounts:
         - name: config
