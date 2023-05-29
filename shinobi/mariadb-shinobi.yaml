@@ -22,10 +22,10 @@ spec:
           - containerPort: 3306
         resources:
           limits:
-            memory: "150Mi"
+            memory: "300Mi"
 #           cpu: "300m"
           requests:
-            memory: "50Mi"
+            memory: "250Mi"
 #           cpu: "250m"
         args:
           - --transaction-isolation=READ-COMMITTED
