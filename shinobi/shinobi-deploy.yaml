@@ -39,6 +39,10 @@ spec:
           mountPath: /videos
         - name: streams
           mountPath: /dev/shm/shinobiDockerTemp
+        - name: plugins
+          mountPath: /home/Shinobi/plugins
+        - name: customautoload
+          mountPath: /libs/customAutoLoad          
       volumes:
       - name: config
         nfs:
@@ -52,6 +56,15 @@ spec:
         nfs:
           server: #nfs_volume_IP
           path: /shinobi/persistent/volume/path
+      - name: plugins
+        nfs:
+          server: #nfs_volume_IP
+          path: /shinobi/persistent/volume/path  
+      - name: customautoload
+        nfs:
+          server: #nfs_volume_IP
+          path: /shinobi/persistent/volume/path         
+
 
 ---
 
