@@ -24,7 +24,7 @@ spec:
         - name: TZ
           value: Europe/London
         name: shinobi
-        image: migoller/shinobidocker:latest
+        image: registry.gitlab.com/shinobi-systems/shinobi:dev
         resources:
           limits:
             memory: "300Mi"
@@ -38,7 +38,7 @@ spec:
         - name: videos
           mountPath: /videos
         - name: streams
-          mountPath: /dev/shm/shinobiDockerTemp
+          mountPath: /dev/shm/streams
         - name: plugins
           mountPath: /home/Shinobi/plugins
         - name: customautoload
