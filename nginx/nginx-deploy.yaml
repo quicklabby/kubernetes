@@ -53,7 +53,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`yourdomain.com`)
+    - match: Host(`{{ .Values.domain }}`)
       kind: Rule
       services:
         - name: nginx
@@ -61,7 +61,7 @@ spec:
       middlewares:
         - name: default-headers
   tls:
-    secretName: prod-yourdomain-tls
+    secretName: {{ .Values.cert }}
 
 ---
 
