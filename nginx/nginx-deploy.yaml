@@ -33,12 +33,12 @@ spec:
       volumes:
       - name: website
         nfs:
-          server: server_ip
-          path:  /persistant/path/www
+          server: {{ .Values.nfs_server }}
+          path:  {{ .Values.database_path }}/nginx/www
       - name: webconfig
         nfs:
-          server: server_ip
-          path: /persistant/path/nginx
+          server: {{ .Values.nfs_server }}
+          path: {{ .Values.database_path }}/nginx/nginx
 
 ---
 
