@@ -33,12 +33,12 @@ spec:
       volumes:
       - name: website
         nfs:
-          server: {{ .Values.nfs_server }}
-          path:  {{ .Values.database_path }}/nginx/www
+          server: nfs_server_ip
+          path:  /persistant/path/nginx/www
       - name: webconfig
         nfs:
-          server: {{ .Values.nfs_server }}
-          path: {{ .Values.database_path }}/nginx/nginx
+          server: nfs_server_ip
+          path: /persistant/path/nginx
 
 ---
 
@@ -53,7 +53,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`{{ .Values.domain }}`)
+    - match: Host(`your.domain.com`)
       kind: Rule
       services:
         - name: nginx
@@ -61,7 +61,7 @@ spec:
       middlewares:
         - name: default-headers
   tls:
-    secretName: {{ .Values.cert }}
+    secretName: prod-domain-tls
 
 ---
 
