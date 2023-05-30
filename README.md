@@ -136,5 +136,5 @@ Step 7 (Optional):
 1. ```helm repo add argo https://argoproj.github.io/argo-helm```
 2. ```helm repo update```
 3. ```kubectl create namespace argocd```
-4. ```helm install argocd argo/argo-cd  --namespace argocd -f argocd-values.yml```
+4. ```helm install argocd argo/argo-cd  --namespace argocd -f argocd-values.yaml```
 5. Apply traefik ingress
