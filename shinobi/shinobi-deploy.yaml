@@ -23,6 +23,26 @@ spec:
           value: "1000"
         - name: TZ
           value: Europe/London
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_DATABASE
+              name: mariadb-secrets
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_PASSWORD
+              name: mariadb-secrets
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_USER
+              name: mariadb-secrets
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MYSQL_ROOT_PASSWORD
+              name: mariadb-secrets
         name: shinobi
         image: registry.gitlab.com/shinobi-systems/shinobi:dev
         resources:
@@ -42,7 +62,9 @@ spec:
         - name: plugins
           mountPath: /home/Shinobi/plugins
         - name: customautoload
-          mountPath: /libs/customAutoLoad          
+          mountPath: /libs/customAutoLoad
+        - name: data
+          mountPath: /var/lib/mysql          
       volumes:
       - name: config
         nfs:
@@ -63,7 +85,11 @@ spec:
       - name: customautoload
         nfs:
           server: #nfs_volume_IP
-          path: /shinobi/persistent/volume/path         
+          path: /shinobi/persistent/volume/path
+      - name: data
+        nfs:
+          server: #nfs_volume_IP
+          path: /shinobi/persistent/volume/path          
 
 
 ---
