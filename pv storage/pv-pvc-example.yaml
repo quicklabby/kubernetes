@@ -1,3 +1,5 @@
+###Create a the same pv-pvc file for each deployment###
+
 apiVersion: v1
 kind: PersistentVolume
 metadata:
