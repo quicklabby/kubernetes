@@ -21,24 +21,20 @@ spec:
         resources:
           limits:
             memory: "20Mi"
-#           cpu: "300m"
           requests:
             memory: "10Mi"
-#            cpu: "250m"
         volumeMounts: 
         - name: website
-          mountPath: /var/www/html
-        - name: webconfig
-          mountPath: /etc/nginx/conf.d
+          mountPath: /var/www/html/
+          subPath: www
+        - name: website
+          mountPath: /etc/nginx/conf.d/
+          subPath: nginx
       volumes:
-      - name: website
-        nfs:
-          server: nfs_server_ip
-          path:  /persistant/path/nginx/www
-      - name: webconfig
-        nfs:
-          server: nfs_server_ip
-          path: /persistant/path/nginx
+        - name: website
+          persistentVolumeClaim:
+            claimName: pvc-nginx
+
 
 ---
 
