@@ -16,15 +16,15 @@ spec:
         app: plex
     spec:
       containers:
-      - env:
-        - name: PLEX_CLAIM
-          value: #plex_claim_token
+      - env:  
+#        - name: PLEX_CLAIM
+#          value: claim-85a27sNLJNRmoxXnKkUs
         - name: PGID
-          value: "1000"
+          value: "1000"    
         - name: PUID
-          value: "1000"
+          value: "1000" 
         - name: TZ
-          value: europe/London
+          value: Asia/Tokyo  
         image: plexinc/pms-docker:latest
         name: plex
         ports:
@@ -35,7 +35,7 @@ spec:
           name: dlna-tcp
           protocol: TCP
         - containerPort: 1900
-          name: dlna-udp
+          name: dlna-udp 
           protocol: UDP
         - containerPort: 3005
           name: plex-companion
@@ -48,46 +48,34 @@ spec:
           protocol: UDP
         - containerPort: 32412
           name: gdm2-32410
-          protocol: UDP                                                                                                                                                                                                                                 - containerPort: 32413                                                                                                                                                                                                                            name: gdm3-32413
           protocol: UDP
-        - containerPort: 32414                                                                                                                                                                                                                            name: gdm4-32414
+        - containerPort: 32413
+          name: gdm3-32413
+          protocol: UDP
+        - containerPort: 32414
+          name: gdm4-32414
         resources:
           limits:
-            memory: "1500Mi"
-#           cpu: "800m"
+            memory: "2000Mi"
           requests:
-            memory: "1000Mi"
-#           cpu: "500m"
-        volumeMounts:
+            memory: "1200Mi" 
+        volumeMounts: 
         - name: config
           mountPath: /config
+        - name: media
+          mountPath: /hdd
+        - name: tmp
+          mountPath: /temporary
       volumes:
-      - name: config
-        nfs:
-          server: ##nfs_volume_IP
-          path: /plex/persistant/path/volume
----
-
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: plex
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: traefik-external
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`plex.domain.com`)
-      kind: Rule
-      services:
-        - name: plex
-          port: 32400
-      middlewares:
-        - name: default-headers
-  tls:
-    secretName: prod-yourdomain-tls
+        - name: config
+          persistentVolumeClaim:
+            claimName: pvc-plex-database
+        - name: media
+          persistentVolumeClaim:
+            claimName: pvc-plex-media
+        - name: tmp
+          persistentVolumeClaim:
+            claimName: pvc-plex-tmp
 
 ---
 
