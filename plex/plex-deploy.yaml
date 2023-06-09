@@ -18,7 +18,7 @@ spec:
       containers:
       - env:  
 #        - name: PLEX_CLAIM
-#          value: claim-85a27sNLJNRmoxXnKkUs
+#          value: ##your token##
         - name: PGID
           value: "1000"    
         - name: PUID
