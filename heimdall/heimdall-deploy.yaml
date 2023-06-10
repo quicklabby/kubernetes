@@ -18,49 +18,25 @@ spec:
       containers:
       - env:
         - name: PGID
-          value: "1000"
+          value: "1000"    
         - name: PUID
-          value: "1000"
+          value: "1000" 
         - name: TZ
-          value: Europe/London
+          value: Asia/Tokyo 
         name: heimdall
         image: lscr.io/linuxserver/heimdall:latest
         resources:
           limits:
             memory: "100Mi"
-#           cpu: "250m"
           requests:
             memory: "80Mi"
-#           cpu: "150m"
-        volumeMounts:
+        volumeMounts: 
         - name: config
           mountPath: /config
       volumes:
-      - name: config
-        nfs:
-          server: ##nfs_volume_IP
-          path: /heimdall/persistent/volume/path
-
----
-
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: heimdall
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: traefik-external
-spec:
-  entryPoints:
-    - websecure                                                                                                                                                                                                                                   routes:                                                                                                                                                                                                                                           - match: Host(`home.explanet.xyz`)
-      kind: Rule
-      services:
-        - name: heimdall
-          port: ##traefik_chosen_port
-      middlewares:
-        - name: default-headers
-  tls:
-    secretName: prod-yourdomain-tls
+        - name: config
+          persistentVolumeClaim:
+            claimName: pvc-heimdall
 
 ---
 
