@@ -51,4 +51,4 @@ spec:
   ports:
   - name: http
     targetPort: 80
-    port: ##traefik_chosen_port
+    port: 8000
