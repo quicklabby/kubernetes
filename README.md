@@ -5,7 +5,7 @@ Hardware Used:
 
    - Pfsense box
    - ASUS mini PC (Proxmox with 2 VMs as worker nodes)
-   - Raspberry Pi 3B+ (Tainted Master Node)
+   - Raspberry Pi4 8GB RAM (Tainted Master Node)
    - Cisco switch
    - Ubiquity AP
 
