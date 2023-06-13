@@ -120,6 +120,9 @@ Step 5:
 
 2. Deploy  ```prod-deploy.yaml``` and ```yourdomain-prod-deploy.yaml``` with your chosen domain (for testing purposes, you can use the ```staging-deploy.yaml``` and ```yourdomain-stage-deploy.yaml```)
 
+How to create a DNS token with Cloudflare: 
+https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/
+
 ----------------------------
 
 Step 6 (Optional):
