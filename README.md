@@ -112,7 +112,7 @@ Step 4:
 5. Apply values:
 ```helm install cert-manager jetstack/cert-manager --namespace cert-manager --values=values.yaml --version v1.9.1```
 
-https://cert-manager.io/docs/installation/
+https://artifacthub.io/packages/helm/cert-manager/cert-manager
 
 ----------------------------
 
