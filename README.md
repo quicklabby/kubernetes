@@ -9,7 +9,7 @@ Hardware Used:
    - Cisco switch
    - Ubiquity AP
 
-This is a small project I created to learn kubernetes by running a K3s cluster with limited hardware, one Asus mini PC and a Raspberry Pi 3B+.
+This is a small project I created to learn kubernetes by running a K3s cluster with limited hardware, one Asus mini PC and a Raspberry Pi4.
 The Asus mini PC has 2x SSD installed and 32GB of RAM shared with Proxmox, which runs 2 VMs with 14GB RAM allocated for each node.
 Since only one mini pc is not enough to run a HA cluster, I installed each node on different SSDs, at least in case of a disk failure one of the node should still running.
 All the pods persistent data is retained in an external 256GB NVME volume attached to the Asus mini pc via a 3.1 gen2 USB, shared between the 2 worker nodes for easy backup/replacement in case of failure.
