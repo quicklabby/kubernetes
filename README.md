@@ -130,7 +130,7 @@ Step 6 (Optional):
 
 1. ```helm repo add authentik https://charts.goauthentik.io```
 2. ```helm repo update```
-3. ```helm upgrade --install authentik authentik/authentik -f values.yaml```
+3. ```helm install authentik authentik/authentik -f values.yaml```
 
 https://goauthentik.io/docs/installation/kubernetes
 https://artifacthub.io/packages/helm/goauthentik/authentik
