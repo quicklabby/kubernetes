@@ -17,3 +17,5 @@ spec:
       services:
         - name: api@internal
           kind: TraefikService
+  tls:
+    secretName: prod-domain-tls
