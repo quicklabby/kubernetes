@@ -18,59 +18,29 @@ spec:
       containers:
       - env:
         - name: PGID
-          value: "1000"
+          value: "1000"    
         - name: PUID
-          value: "1000"
+          value: "1000" 
         - name: TZ
-          value: Europe/London
+          value: Asia/Tokyo 
         name: tautulli
         image: lscr.io/linuxserver/tautulli:latest
         resources:
           limits:
             memory: "200Mi"
-#           cpu: "300m"
           requests:
             memory: "150Mi"
-#           cpu: "250m"
-        volumeMounts:
-        - name: config
+        volumeMounts: 
+        - name: data
           mountPath: /config
-        - name: logs
+          subPath: config
+        - name: data
           mountPath: /logs
+          subPath: logs 
       volumes:
-      - name: config
-        nfs:
-          server: ##nfs_volume_IP
-          path: /tautulli/persistent/volume/path
-      - name: logs
-        nfs:
-          server: ##nfs_volume_IP
-          path: /tautulli/persistent/volume/path
-
-
----
-
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: tautulli
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: traefik-external
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`tautulli.domain.com`)
-      kind: Rule
-      services:
-        - name: tautulli
-          port: #chosen_traefik_port
-      middlewares:
-        - name: default-headers
-  tls:
-    secretName: prod-explanet-tls
-
+        - name: data
+          persistentVolumeClaim:
+            claimName: pvc-tautulli
 ---
 
 apiVersion: v1
@@ -84,4 +54,4 @@ spec:
   ports:
   - name: http
     targetPort: 8181
-    port: #chosen_traefik_port
+    port: 8181
