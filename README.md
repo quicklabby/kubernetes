@@ -154,3 +154,6 @@ Step 8 (Optional):
 1. ```helm repo add keel https://charts.keel.sh ```
 2. ```helm repo update```
 3. ```helm install keel --namespace=kube-system keel/keel keel-values.yaml```
+4. Add annotations for keel as needed on your deployment yaml
+
+https://keel.sh/docs/#deploying-with-kubectl
