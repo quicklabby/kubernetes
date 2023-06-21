@@ -13,9 +13,8 @@ spec:
   template:
     metadata:
       labels:
-        app: plex
-## Add the below annotations for keel ##      
-      annotations:
+        app: plex    
+      annotations: ## Add this annotations for keel ##  
         keel.sh/policy: minor
         keel.sh/trigger: poll         
     spec:
