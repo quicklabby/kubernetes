@@ -151,7 +151,7 @@ https://argo-cd.readthedocs.io/en/stable/getting_started/
 ----------------------------
 
 Step 8 (Optional):
-   Install keel via helm with customized values
+   Install keel via helm with customized values for automatic container image updates
    
 1. ```helm repo add keel https://charts.keel.sh ```
 2. ```helm repo update```
