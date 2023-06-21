@@ -5,6 +5,9 @@ metadata:
   namespace: default
   labels:
     app: tautulli
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   selector:
