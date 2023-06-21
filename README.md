@@ -146,6 +146,8 @@ Step 7 (Optional):
 4. ```helm install argocd argo/argo-cd  --namespace argocd -f argocd-values.yaml```
 5. Apply traefik ingress
 
+https://argo-cd.readthedocs.io/en/stable/getting_started/
+
 ----------------------------
 
 Step 8 (Optional):
