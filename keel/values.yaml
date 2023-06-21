@@ -1,0 +1,63 @@
+# Mail notifications
+mail:
+  enabled: true
+  from: ""
+  to: ""
+  smtp:
+    server: ""
+    port: ""
+    user: ""
+    pass: ""
+
+# Basic auth (to enable UI/API)
+basicauth:
+  enabled: true
+  user: ""
+  password: ""
+
+# Keel self-update
+# self-update to the latest release version
+keel:
+  policy: patch
+  trigger: poll
+  pollSchedule: "@every 3m"
+  images:
+    - repository: image.repository
+      tag: image.tag
+
+# Resources
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+# Keel service
+service:
+  enabled: true
+  name: http
+  type: ClusterIP
+  port: 9300 
+  targetPort: 9300
+
+
+# Traefik Ingress
+ingress:
+  enabled: true
+  labels: {}
+  annotations: 
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - host: keel.domain.com
+      paths:
+        - /
+  tls:
+    - secretName: prod-domain-tls
+      hosts:
+        - keel.domain.com
+
+# Enable DEBUG logging
+debug: true
