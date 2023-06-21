@@ -5,6 +5,9 @@ metadata:
   namespace: default
   labels:
     app: plex
+  annotations: ## Add this annotations for keel ##  
+    keel.sh/policy: minor
+    keel.sh/trigger: poll        
 spec:
   replicas: 1
   selector:
@@ -13,10 +16,7 @@ spec:
   template:
     metadata:
       labels:
-        app: plex    
-      annotations: ## Add this annotations for keel ##  
-        keel.sh/policy: minor
-        keel.sh/trigger: poll         
+        app: plex     
     spec:
       containers:
       - env:  
