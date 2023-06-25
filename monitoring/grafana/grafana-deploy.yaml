@@ -5,6 +5,9 @@ metadata:
   namespace: monitoring
   labels:
     app: grafana
+  annotations: ## Add this annotations for keel ## 
+    keel.sh/policy: minor
+    keel.sh/trigger: poll    
 spec:
   replicas: 1
   selector:
