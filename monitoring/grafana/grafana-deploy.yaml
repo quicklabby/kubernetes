@@ -28,7 +28,7 @@ spec:
         - name: GF_DEFAULT_INSTANCE_NAME
           value: "home"
         - name: TZ
-          value: "Europe/London"
+          value: "Asia/Tokyo" 
         - name: GF_ANALYTICS_REPORTING_ENABLED
           value: "false"
         - name: GF_SERVER_ENABLE_GZIP
@@ -51,44 +51,16 @@ spec:
           timeoutSeconds: 2
         resources:
           limits:
-#           cpu: 200m
-            memory: 200Mi
+            memory: 500Mi
           requests:
-#           cpu: 100m
-            memory: 100Mi
+            memory: 400Mi
         volumeMounts:
         - name: config
           mountPath: /var/lib/grafana
       volumes:
-      - name: config
-        nfs:
-          path: /grafana/persistent/volume/path
-          server: ##nfs_volume_IP
-
-
----
-
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: grafana
-  namespace: monitoring
-  annotations:
-    kubernetes.io/ingress.class: traefik-external
-spec:
-  entryPoints:
-    - websecure
-  routes:
-    - match: Host(`grafana.domain.com`)
-      kind: Rule
-      services:
-        - name: grafana
-          port: #chosen_traefik_port
-      middlewares:
-        - name: default-headers
-  tls:
-   secretName: prod-yourdomain-tls
-
+        - name: config
+          persistentVolumeClaim:
+            claimName: pvc-grafana
 
 ---
 
@@ -103,4 +75,4 @@ spec:
   ports:
     - name: http
       targetPort: 3000
-      port: #chosen_traefik_port
+      port: 4000
