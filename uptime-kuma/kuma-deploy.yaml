@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+metadata:                                                                                                                                                                                                                                         name: uptime-kuma                                                                                                                                                                                                                               namespace: monitoring
+  labels:                                                                                                                                                                                                                                           app: uptime-kuma
+  annotations:                                                                                                                                                                                                                                      keel.sh/policy: minor
+    keel.sh/trigger: poll
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uptime-kuma
+  template:
+    metadata:
+      labels:
+        app: uptime-kuma
+    spec:
+      containers:
+      - name: uptime-kuma
+        image: louislam/uptime-kuma:latest
+        resources:
+          limits:
+            memory: "200Mi"
+          requests:
+            memory: "100Mi"
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pvc-kuma-data
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: uptime-kuma
+  namespace: monitoring
+spec:
+  selector:
+    app: uptime-kuma
+  ports:
+  - name: http
+    targetPort: 3001
+    port: 3001
