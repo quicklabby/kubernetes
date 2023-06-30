@@ -1,8 +1,12 @@
 kind: Deployment
 apiVersion: apps/v1
-metadata:                                                                                                                                                                                                                                         name: uptime-kuma                                                                                                                                                                                                                               namespace: monitoring
-  labels:                                                                                                                                                                                                                                           app: uptime-kuma
-  annotations:                                                                                                                                                                                                                                      keel.sh/policy: minor
+metadata:                                                                                                                                                                                                                                       
+  name: uptime-kuma                                                                                                                                                                                                                               
+  namespace: monitoring
+  labels:                                                                                                                                                                                                                                           
+    app: uptime-kuma
+  annotations:
+    keel.sh/policy: minor
     keel.sh/trigger: poll
 spec:
   replicas: 1
@@ -43,4 +47,3 @@ spec:
   ports:
   - name: http
     targetPort: 3001
-    port: 3001
