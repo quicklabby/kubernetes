@@ -1,0 +1,63 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: homeassistant
+  namespace: default
+  labels:
+    app: homeassistant
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll   
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homeassistant
+  template:
+    metadata:
+      labels:
+        app: homeassistant
+    spec:
+      containers:
+      - env:
+        - name: PGID
+          value: "1000"    
+        - name: PUID
+          value: "1000" 
+        - name: TZ
+          value: Asia/Tokyo
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
+            - NET_BROADCAST
+        name: homeassistant
+        image: lscr.io/linuxserver/homeassistant:latest
+        resources:
+          limits:
+            memory: "300Mi"
+          requests:
+            memory: "200Mi"
+        volumeMounts: 
+        - name: data
+          mountPath: /config
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: pvc-homeassistant
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: homeassistant
+  namespace: default
+spec:
+  selector:
+    app: homeassistant
+  ports:
+  - name: http
+    targetPort: 8123
+    port: 8123
