@@ -1,20 +1,15 @@
 # K3s Mini Cluster Homelab
 The project involves the configuration of a 3-node mini cluster, incorporating a Metallb load balancer via BGP and Traefik as the Ingress Controller. Cert Manager is employed to automate Let's Encrypt certificate management, utilizing the DNS challenge method over Cloudflare.
 
-Hardware Components:
+Hardware components:
 
-    Pfsense appliance
-    ASUS mini PC (utilizing Proxmox with 2 VMs as worker nodes)
-    Raspberry Pi4 with 8GB RAM (designated as the Master Node)
-    Cisco switch
-    Ubiquity Access Point
+- Pfsense Appliance
+- ASUS mini PC (utilizing Proxmox with 2 VMs as worker nodes)
+- Raspberry Pi4 with 8GB RAM (designated as the Master Node)
+- Cisco switch
+- Ubiquity Access Point
 
-This is a small project aimed to create a K3s cluster with limited hardware, one Asus mini PC and one Raspberry Pi4.
-The Asus mini PC has 2x SSD installed and 32GB of RAM shared with Proxmox, which runs 2 VMs with 14GB RAM allocated for each node.
-As the ASUS mini pc is not enough to run a HA cluster, I installed each node on a different internal SSDs, as in case of a disk failure one of the node should still running.
-All the pods persistent data is retained in an external 256GB NVME volume attached to the Asus mini pc via a 3.1 gen2 USB, shared between the 2 worker nodes for easy backup/replacement in case of failure.
-The external NVME is attached to Proxmox and the worker nodes as a NFS volume.
-The Rasperry Pi4 has a 128GB SD card installed and acts as a tainted master node as all the pods are scheduled in the workers nodes only.
+This undertaking focuses on establishing a K3s cluster within resource constraints, utilizing an ASUS mini PC and a Raspberry Pi4. The ASUS mini PC features 2 SSDs and 32GB of RAM, shared with Proxmox, which hosts 2 VMs allocated with 14GB RAM each for worker nodes. Given the ASUS mini PC's limitations for high availability clustering, each node is installed on separate internal SSDs to ensure continued operation in the event of one disk failure. Persistent data for all pods is stored on an external 256GB NVME volume, connected to the ASUS mini PC via USB 3.1 gen2 and shared between the worker nodes for simplified backup and replacement procedures. This external NVME volume is mounted to Proxmox and the worker nodes as an NFS volume. The Raspberry Pi4, equipped with a 128GB SD card, serves as a tainted master node, overseeing pod scheduling exclusively within the worker nodes.
 
 Webserver:
 - Nginx
