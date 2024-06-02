@@ -50,7 +50,7 @@ service:
   enabled: true
   type: LoadBalancer
   annotations:
-    metallb.universe.tf/loadBalancerIPs: 192.168.1.20 (one of the metallb address DHCP range assigned in BGP config)
+    metallb.universe.tf/loadBalancerIPs: 192.168.1.20 # (one of the metallb address DHCP range assigned in BGP config)
 
 resources: 
    requests:
