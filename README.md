@@ -39,7 +39,6 @@ Monitoring/Logs:
 - InfluxDB
 - Prometheus
 - Node Exporter
-- Telegraf
 
 CI/CD
 - ArgoCD
