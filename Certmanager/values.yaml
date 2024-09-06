@@ -1,4 +1,5 @@
-installCRDs: true 
+crds:
+  enabled: true
 replicaCount: 2
 extraArgs:
   - --dns01-recursive-nameservers=1.1.1.1:53,1.1.1.1:53
