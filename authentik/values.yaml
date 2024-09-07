@@ -5,14 +5,6 @@ authentik:
     postgresql:
         password: base64_encoded_password
 
-ingress:
-    enabled: true
-    hosts:
-        - host: authentik.yourdomain.com
-          paths:
-              - path: "/"
-                pathType: Prefix
-
 email:
     enabled: true
     host: smtp.youremaildomain.com
@@ -22,17 +14,16 @@ email:
     password: your_email_app_password
     from: youremail
 
-service:
+server:
+  ingress:
     enabled: true
-    type: ClusterIP
-    port: 80
-    name: http
-    protocol: TCP
-    annotations:
-      kubernetes.io/ingress.class: traefik-external
+    hosts:
+      - authentik.domain.tld
 
 postgresql:
-    enabled: true
-    postgresqlPassword: base64_encoded_password
+  enabled: true
+  auth:
+    password: base64_encoded_password
+
 redis:
     enabled: true
