@@ -15,8 +15,9 @@ email:
     from: youremail
 
 server:
-  ingress:
-    enabled: true
+    ingress:
+        # Specify kubernetes ingress controller class name
+        ingressClassName: traefik
     hosts:
       - authentik.domain.tld
 
