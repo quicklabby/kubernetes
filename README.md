@@ -63,6 +63,7 @@ Step 1:
 https://docs.k3s.io/quick-start
 
 TO UPGRADE k3s:
+
 Re-run installation the commands on each node at time starting from the master node. Before proceed with the installaton run the kill all script on each node:
 ```/usr/local/bin/k3s-killall.sh```
 
