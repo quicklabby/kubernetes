@@ -50,7 +50,8 @@ CI/CD
 ```https://github.com/quicklabby/Ansible-Automation-K3s-Deployment-Playbook/tree/main```
 
 Automated Helm installation/upgrade bash script:
-```helm-install-upgrade.sh```
+
+helm-install-upgrade.sh
 
 ## Manual Installation Steps:
 
