@@ -45,12 +45,12 @@ CI/CD
 
 ----------------------------
 
---- ANSIBLE PLAYBOOK --
+## ANSIBLE PLAYBOOK
 
 See K3s Deployment Install/Upgrade and Uninstall Playbook:
-https://github.com/quicklabby/Ansible-Automation-K3s-Deployment-Playbook/tree/main
+```https://github.com/quicklabby/Ansible-Automation-K3s-Deployment-Playbook/tree/main```
 
----- MANUAL INSTALLATION STEPS ----
+## MANUAL INSTALLATION STEPS
 
 Step 1:
   K3s installation
