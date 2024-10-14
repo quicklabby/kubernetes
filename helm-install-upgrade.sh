@@ -22,15 +22,15 @@ if [ $anw ==  in ]
      kubectl create namespace argocd
 
      echo "Installing required helm repo"
-     kelm install --namespace=traefik traefik traefik/traefik -f ~/kubernetes/traefik/values.yaml #modify the path of the value.yaml directory
+     kelm install --namespace=traefik traefik traefik/traefik -f ~/kubernetes/traefik/values.yaml #input the correct path of your value.yaml directory
      echo ""
-     helm install cert-manager jetstack/cert-manager --namespace cert-manager -f ~/kubernetes/certmanager/values.yaml #modify the path of the value.yaml directory
+     helm install cert-manager jetstack/cert-manager --namespace cert-manager -f ~/kubernetes/certmanager/values.yaml #input the correct path of your value.yaml directory
      echo ""
-     helm install authentik authentik/authentik -f ~/kubernetes/authentik/values.yaml #modify the path of the value.yaml directory
+     helm install authentik authentik/authentik -f ~/kubernetes/authentik/values.yaml #input the correct path of your value.yaml directory
      echo ""
-     helm install argocd argo/argo-cd  --namespace argocd -f ~/kubernetes/argocd/values.yaml #modify the path of the value.yaml directory
+     helm install argocd argo/argo-cd  --namespace argocd -f ~/kubernetes/argocd/values.yaml #input the correct path of your value.yaml directory
      echo ""
-     helm install keel --namespace=kube-system keel/keel -f ~/kubernetes/keel/keel-values.yaml #modify the path of the value.yaml directory
+     helm install keel --namespace=kube-system keel/keel -f ~/kubernetes/keel/keel-values.yaml #input the correct path of your value.yaml directory
      echo "Installation Completed"
 
 elif [ $anw == up ]
@@ -41,13 +41,13 @@ elif [ $anw == up ]
      echo "Upgrading helm repo"
      helm upgrade --namespace=traefik traefik traefik/traefik -f ~/kubernetes/traefik/values.yaml
      echo ""
-     helm upgrade cert-manager jetstack/cert-manager --namespace cert-manager -f ~/kubernetes/certmanager/values.yaml #modify the path of the value.yaml directory
+     helm upgrade cert-manager jetstack/cert-manager --namespace cert-manager -f ~/kubernetes/certmanager/values.yaml #input the correct path of your value.yaml directory
      echo ""
-     helm upgrade authentik authentik/authentik -f ~/kubernetes/authentik/values.yaml #modify the path of the value.yaml directory
+     helm upgrade authentik authentik/authentik -f ~/kubernetes/authentik/values.yaml #input the correct path of your value.yaml directory
      echo ""
-     helm upgrade argocd argo/argo-cd  --namespace argocd -f ~/kubernetes/argocd/values.yaml #modify the path of the value.yaml directory
+     helm upgrade argocd argo/argo-cd  --namespace argocd -f ~/kubernetes/argocd/values.yaml #input the correct path of your value.yaml directory
      echo ""
-     helm upgrade keel --namespace=kube-system keel/keel -f ~/kubernetes/keel/keel-values.yaml #modify the path of the value.yaml directory
+     helm upgrade keel --namespace=kube-system keel/keel -f ~/kubernetes/keel/keel-values.yaml #input the correct path of your value.yaml directory
      echo "Upgrade Completed"
 
 else
