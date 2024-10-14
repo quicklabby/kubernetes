@@ -45,7 +45,7 @@ CI/CD
 
 ----------------------------
 
-## Automated K3s Deployment Install/Upgrade/Uninstall via Ansible Playbooks:
+## Automated K3s Deployment: Install/Upgrade and Uninstall via Ansible Playbooks:
 
 ```https://github.com/quicklabby/Ansible-Automation-K3s-Deployment-Playbook/tree/main```
 
