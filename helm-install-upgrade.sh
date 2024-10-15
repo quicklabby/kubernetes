@@ -27,11 +27,11 @@ if [ $anw ==  in ]
      for namespace in traefik cert-manager argocd; do kubectl create namespace $namespace; done
 
    declare -A installs=(
-    [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik"
-    [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager"
-    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml authentik"
-    [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd"
-    [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system"
+    [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik" #input your value.yaml directory"
+    [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager" #input your value.yaml directory"
+    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml authentik" #input your value.yaml directory"
+    [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd" #input your value.yaml directory"
+    [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system" #input your value.yaml directory"
 )
 
      for app in "${!installs[@]}"; do
@@ -48,11 +48,11 @@ elif [ $anw == up ]
      helm repo update
 
    declare -A upgrades=(
-    [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik"
-    [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager"
-    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml authentik"
-    [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd"
-    [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system"
+    [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik" #input your value.yaml directory"
+    [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager" #input your value.yaml directory"
+    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml authentik" #input your value.yaml directory"
+    [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd" #input your value.yaml directory"
+    [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system" #input your value.yaml directory"
 )
 
      for app in "${!upgrades[@]}"; do
