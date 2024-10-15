@@ -5,51 +5,63 @@ set +e
 read -p "Do you want to install or upgrade helm repo? (Type in/up)" anw
 
 if [ $anw ==  in ]
-   then 
-     echo "Adding helm repo"   	   
-     helm repo add traefik https://traefik.github.io/charts
-     helm repo add jetstack https://charts.jetstack.io
-     helm repo add authentik https://charts.goauthentik.io
-     helm repo add argo https://argoproj.github.io/argo-helm
-     helm repo add keel https://charts.keel.sh 
+   then
+     printf "\033[33mAdding Helm repo\033[0m\n\n"    
 
-     echo "Updating helm repo"
+   declare -A repos=(
+     [traefik]="https://traefik.github.io/charts"
+     [jetstack]="https://charts.jetstack.io"
+     [authentik]="https://charts.goauthentik.io"
+     [argo]="https://argoproj.github.io/argo-helm"
+     [keel]="https://charts.keel.sh"
+)
+
+     for repo in "${!repos[@]}"; do
+       helm repo add "$repo" "${repos[$repo]}"
+     done
+
+     printf "\033[33mUpdating Helm repo\033[0m\n\n"
      helm repo update
 
-     echo "Creating required namespaces"
-     kubectl create namespace traefik
-     kubectl create namespace cert-manager
-     kubectl create namespace argocd
+     printf "\033[33mCreating required namespaces\033[0m\n\n"
+     for namespace in traefik cert-manager argocd; do kubectl create namespace $namespace; done
 
-     echo "Installing required helm repo"
-     kelm install --namespace=traefik traefik traefik/traefik -f ~/kubernetes/traefik/values.yaml #input the correct path of your value.yaml directory
-     echo ""
-     helm install cert-manager jetstack/cert-manager --namespace cert-manager -f ~/kubernetes/certmanager/values.yaml #input the correct path of your value.yaml directory
-     echo ""
-     helm install authentik authentik/authentik -f ~/kubernetes/authentik/values.yaml #input the correct path of your value.yaml directory
-     echo ""
-     helm install argocd argo/argo-cd  --namespace argocd -f ~/kubernetes/argocd/values.yaml #input the correct path of your value.yaml directory
-     echo ""
-     helm install keel --namespace=kube-system keel/keel -f ~/kubernetes/keel/keel-values.yaml #input the correct path of your value.yaml directory
-     echo "Installation Completed"
+   declare -A installs=(
+    [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik"
+    [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager"
+    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml authentik"
+    [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd"
+    [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system"
+)
+
+     for app in "${!installs[@]}"; do
+       IFS=' ' read -r chart values namespace <<< "${installs[$app]}"
+       printf "\033[33mInstalling $app...\033[0m\n\n"
+       helm install --namespace="$namespace" "$app" "$chart" -f "$values"
+     done
+
+     printf "\033[32mInstall Completed\033[0m\n\n"
 
 elif [ $anw == up ]
    then
-     echo "Updating helm repo"
+     printf "\033[33Updating helm repo\033[0m\n\n"
      helm repo update
 
-     echo "Upgrading helm repo"
-     helm upgrade --namespace=traefik traefik traefik/traefik -f ~/kubernetes/traefik/values.yaml
-     echo ""
-     helm upgrade cert-manager jetstack/cert-manager --namespace cert-manager -f ~/kubernetes/certmanager/values.yaml #input the correct path of your value.yaml directory
-     echo ""
-     helm upgrade authentik authentik/authentik -f ~/kubernetes/authentik/values.yaml #input the correct path of your value.yaml directory
-     echo ""
-     helm upgrade argocd argo/argo-cd  --namespace argocd -f ~/kubernetes/argocd/values.yaml #input the correct path of your value.yaml directory
-     echo ""
-     helm upgrade keel --namespace=kube-system keel/keel -f ~/kubernetes/keel/keel-values.yaml #input the correct path of your value.yaml directory
-     echo "Upgrade Completed"
+   declare -A upgrades=(
+    [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik"
+    [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager"
+    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml authentik"
+    [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd"
+    [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system"
+)
+
+     for app in "${!upgrades[@]}"; do
+       IFS=' ' read -r chart values namespace <<< "${upgrades[$app]}"
+       printf "\033[33mUpgrading $app...\033[0m\n\n"
+       helm upgrade --namespace="$namespace" "$app" "$chart" -f "$values"
+     done
 
 else
 	echo "Please type in (install) or up (upgrade)"	
 fi
+
