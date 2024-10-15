@@ -24,7 +24,7 @@ if [ $anw ==  in ]
      helm repo update
 
      printf "\033[33mCreating required namespaces\033[0m\n\n"
-     for namespace in traefik cert-manager argocd; do kubectl create namespace $namespace; done
+     for helm in traefik cert-manager argocd; do kubectl create namespace $helm; done
 
    declare -A installs=(
     [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik" #input your value.yaml directory"
