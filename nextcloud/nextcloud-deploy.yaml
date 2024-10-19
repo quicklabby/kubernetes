@@ -47,13 +47,14 @@ spec:
           value: nextlcoud.domain.com
         image: nextcloud:latest
         name: nextcloud
-        lifecycle: ##Optional: should run a nextcloud cronjob for the installed apache browser##
+        lifecycle: ##Optional: should run a nextcloud cronjob for the installed apache browser and scan occ library##
           postStart:
             exec:
               command:
               - "sh"
               - "-c"
               - "apt-get update && apt-get install -y openrc && start-stop-daemon --start --background --pidfile /cron.pid --exec /cron.sh"
+              - "su www-data -s /bin/sh -c 'php /var/www/html/occ db:add-missing-indices"
         resources:
           limits:
             memory: "1000Mi"
