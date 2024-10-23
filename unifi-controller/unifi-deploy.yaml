@@ -109,3 +109,28 @@ spec:
       protocol: UDP
   externalIPs:
     - ##add traefik ingress IP here if no domain will be used##
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: unifi
+  namespace: default
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`unifi.yourdomain.com`)
+      kind: Rule
+      services:
+        - name: unifi
+          port: 8443
+          passHostHeader: true ##add this to avoid issue with 8443 and TLS not matching
+          scheme: https ##add this to avoid issue with 8443 and TLS not matching
+      middlewares:
+        - name: default-headers
+  tls:
+    secretName: prod-domain-tls
