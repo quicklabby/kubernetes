@@ -128,8 +128,8 @@ spec:
       services:
         - name: unifi
           port: 8443
-          passHostHeader: true ##add this to avoid issue with 8443 and TLS not matching
-          scheme: https ##add this to avoid issue with 8443 and TLS not matching
+          passHostHeader: true ##add this to avoid issue with port 8443 and TLS not matching
+          scheme: https ##add this to avoid issue with port 8443 and TLS not matching
       middlewares:
         - name: default-headers
   tls:
