@@ -54,7 +54,6 @@ spec:
               - "sh"
               - "-c"
               - "apt-get update && apt-get install -y openrc && start-stop-daemon --start --background --pidfile /cron.pid --exec /cron.sh"
-              - "su www-data -s /bin/sh -c 'php /var/www/html/occ db:add-missing-indices"
         resources:
           limits:
             memory: "1000Mi"
