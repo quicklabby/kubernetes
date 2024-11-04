@@ -17,6 +17,7 @@ spec:
     customFrameOptionsValue: SAMEORIGIN
     customRequestHeaders:
       X-Forwarded-Proto: https
+      X-Robots-Tag: noindex, nofollow
 ---
 
 apiVersion: traefik.io/v1alpha1
