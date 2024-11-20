@@ -51,13 +51,13 @@ spec:
                   key: MYSQL_ROOT_PASSWORD
                   name: mariadb-secrets
         volumeMounts:
-        - name: mariadb-data
+        - name: db
           mountPath: /var/lib/mysql
       volumes:
-        - name: mariadb-data
-          nfs:
-            server: nfs_volume_IP
-            path: /mariadb/persistent/volume/path
+        - name: db
+          persistentVolumeClaim:
+            claimName: pvc-mariadb-db
+
 
 ---
 
