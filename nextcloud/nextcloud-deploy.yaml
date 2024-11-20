@@ -61,7 +61,7 @@ spec:
           requests:
             memory: "800Mi"
 #            cpu: "300m"
-        volumeMounts:
+        volumeMounts: 
         - name: apps
           mountPath: /var/www/html/custom_apps
         - name: config
@@ -71,22 +71,18 @@ spec:
         - name: html
           mountPath: /var/www/html
       volumes:
-      - name: apps
-        nfs:
-          server: ##nfs_volume_IP
-          path: /your/persistant/nextcloud/path
-      - name: config
-        nfs:
-          server: ##nfs_volume_IP
-          path: /your/persistant/nextcloud/path
-      - name: data
-        nfs:
-          server: ##nfs_volume_IP
-          path: /your/persistant/nextcloud/path
-      - name: html
-        nfs:
-          server: ##nfs_volume_IP
-          path: /your/persistant/nextcloud/path
+        - name: apps
+          persistentVolumeClaim:
+            claimName: pvc-nextcloud-apps
+        - name: config
+          persistentVolumeClaim:
+            claimName: pvc-nextcloud-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: pvc-nextcloud-data
+        - name: html
+          persistentVolumeClaim:
+            claimName: pvc-nextcloud-html
 
 ---
 
