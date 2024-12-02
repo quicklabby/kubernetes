@@ -177,3 +177,5 @@ Step 7 (Optional)
 3. ```helm install my-kube-state-metrics prometheus-community/kube-state-metrics```
 
 https://artifacthub.io/packages/helm/prometheus-community/kube-state-metrics
+
+----------------------------
