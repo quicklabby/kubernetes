@@ -166,3 +166,13 @@ Step 8 (Optional):
 4. Add annotations for keel as needed on your deployment yaml
 
 https://keel.sh/docs/#deploying-with-kubectl
+
+
+Step 7 (Optional)
+   Install kube-state-metrics for Prometheus and Grafana monitoring
+   
+1. ```helm repo add prometheus-community https://prometheus-community.github.io/helm-charts ```
+2. ```helm repo update```
+3. ```helm install my-kube-state-metrics prometheus-community/kube-state-metrics```
+
+   https://artifacthub.io/packages/helm/prometheus-community/kube-state-metrics
