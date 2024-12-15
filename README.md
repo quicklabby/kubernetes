@@ -47,7 +47,7 @@ CI/CD
 
 ## Automated K3s Deployment: Install/Upgrade and Uninstall via Ansible Playbooks:
 
-(https://github.com/quicklabby/Ansible-Automation-K3s-Deployment-Playbook/tree/main)
+https://github.com/quicklabby/Ansible-Automation-K3s-Deployment-Playbook/tree/main
 
 Automated Helm installation/upgrade bash script:
 
