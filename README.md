@@ -51,7 +51,7 @@ CI/CD
 
 Automated Helm installation/upgrade bash script:
 
-```helm-install-upgrade.sh```
+[helm-install-upgrade.sh](https://github.com/quicklabby/kubernetes/blob/main/helm-install-upgrade.sh)
 
 ## Manual Installation Steps:
 
