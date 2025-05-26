@@ -29,10 +29,12 @@ Utilities/tools:
 - Heimdall 
 - Ubiquity Unifi Controller
 - Webtop
-- Shinobi 
+- Shinobi
+- Frigate
 
 Applications Database:
 - Mariadb
+- Mongodb
 
 Monitoring/Logs:
 - Grafana
