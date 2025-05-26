@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frigate
+  namespace: default
+  labels:
+    app: frigate
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll   
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frigate 
+  template:
+    metadata:
+      labels:
+        app: frigate
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+      - name: frigate
+        image: ghcr.io/blakeblackshear/frigate:stable
+        ports:
+        - name: http
+          containerPort: 8971
+        - name: rtsp
+          containerPort: 8554
+        - name: webrtc-tcp
+          containerPort: 8555
+          protocol: TCP
+        - name: webrtc-udp
+          containerPort: 8555
+          protocol: UDP
+        env:
+          - name: FRIGATE_AMCREST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: FRIGATE_AMCREST_PASSWORD
+                name: frigate-secrets
+          - name: FRIGATE_AMCREST_USER
+            valueFrom:
+              secretKeyRef:
+                key: FRIGATE_AMCREST_USER
+                name: frigate-secrets
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "2"
+          requests:
+            memory: "1000Mi"
+            cpu: "1000m"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: storage
+          mountPath: /storage
+        - name: config-yml
+          mountPath: /config/config.yml
+          subPath: config.yml
+        - name: shm
+          mountPath: /dev/shm 
+      volumes:
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: "512Mi"  
+      - name: config
+        nfs:
+          server: ##NFS server_volume_IP or PV/PVC config
+          path: /frigate/config
+      - name: storage
+        nfs:
+          server: ##NFS server_volume_IP or PV/PVC config
+          path: /frigate/storage
+      - name: config-yml
+        configMap: 
+          name: frigate-config
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: frigate
+  namespace: default
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`frigate.domain.com`)
+      kind: Rule
+      services:
+        - name: frigate
+          port: ##chosen_traefik_port
+      middlewares:
+        - name: default-headers
+  tls:
+    secretName: prod-yourdomain-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frigate
+spec:
+  selector:
+    app: frigate
+  ports:
+    - name: http
+      targetPort: 8971
+      port: ##chosen_traefik_port
+    - name: rtsp
+      port: 8554
+    - name: webrtc-tcp
+      port: 8555
+      protocol: TCP
+    - name: webrtc-udp
+      port: 8555
+      protocol: UDP
