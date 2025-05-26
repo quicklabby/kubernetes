@@ -5,6 +5,9 @@ metadata:
   namespace: default
   labels:
     app: unifi
+  annotations:
+    keel.sh/policy: minor #keel configuration
+    keel.sh/trigger: poll #keel configuration
 spec:
   replicas: 1
   selector:
@@ -16,15 +19,17 @@ spec:
         app: unifi
     spec:
       containers:
-      - env:
+      - env:  
         - name: PGID
-          value: "1000"
+          value: "1000"    
         - name: PUID
-          value: "1000"
+          value: "1000" 
         - name: MEM_LIMIT
           value: "1024"
         - name: MEM_STARTUP
-          value: "1024"                                                                                                                                                                                                                                 name: unifi                                                                                                                                                                                                                                     image: linuxserver/unifi-controller:latest
+          value: "1024"
+        name: unifi
+        image: lscr.io/linuxserver/unifi-network-application:latest                                                                                                                                                                                                                           name: unifi                                                                                                                                                                                                                                     image: linuxserver/unifi-controller:latest
         ports:
         - name: device-comm
           containerPort: 8080
