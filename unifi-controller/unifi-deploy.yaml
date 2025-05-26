@@ -101,7 +101,7 @@ spec:
       volumes:
       - name: apconfig
         nfs:
-          server: ##nfs_volume_IP
+          server: ##NFS server_volume_IP or PV/PVC config
           path: /unifi/persistant/volume/path
 
 ---
