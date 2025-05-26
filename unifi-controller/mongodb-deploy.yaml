@@ -60,7 +60,7 @@ spec:
       volumes:
         - name: mongo-data
           nfs:
-            server: 192.168.xx.xx #NFS server IP 
+            server: ##NFS server_volume_IP or PV/PVC config
             path: unifi/mongodb
         - name: init-script
           configMap:
@@ -83,4 +83,4 @@ spec:
   selector:
     app: unifi-mongodb
   externalIPs:
-    - 192.168.xx.xx #Traefik external IP
+    - #Traefik external IP
