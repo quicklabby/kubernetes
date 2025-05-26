@@ -2,12 +2,12 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: unifi
-  namespace: default
+  namespace: unifi
   labels:
     app: unifi
   annotations:
-    keel.sh/policy: minor #keel configuration
-    keel.sh/trigger: poll #keel configuration
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   selector:
@@ -27,9 +27,39 @@ spec:
         - name: MEM_LIMIT
           value: "1024"
         - name: MEM_STARTUP
-          value: "1024"
+          value: "1024" 
+        - name: MONGO_PORT
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: MONGO_PORT            
+        - name: MONGO_USER
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_USER          
+              name: mongodb-secret
+        - name: MONGO_PASS
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_PASS
+              name: mongodb-secret
+        - name: MONGO_DBNAME
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_DBNAME
+              name: mongodb-secret   
+        - name: MONGO_AUTHSOURCE      
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_AUTHSOURCE
+              name: mongodb-secret  
+        - name: MONGO_HOST      
+          valueFrom:
+            secretKeyRef:
+              key: MONGO_HOST
+              name: mongodb-secret  
         name: unifi
-        image: lscr.io/linuxserver/unifi-network-application:latest                                                                                                                                                                                                                           name: unifi                                                                                                                                                                                                                                     image: linuxserver/unifi-controller:latest
+        image: lscr.io/linuxserver/unifi-network-application:latest                                                                                                                                                                                                                      name: unifi                                                                                                                                                                                                                                     image: linuxserver/unifi-controller:latest
         ports:
         - name: device-comm
           containerPort: 8080
