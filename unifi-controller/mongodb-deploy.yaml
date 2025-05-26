@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unifi-mongodb
+  namespace: unifi
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unifi-mongodb
+  template:
+    metadata:
+      labels:
+        app: unifi-mongodb
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:7.0
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_INITDB_ROOT_USERNAME
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_INITDB_ROOT_PASSWORD
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_USER
+            - name: MONGO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_PASS
+            - name: MONGO_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_DBNAME
+            - name: MONGO_AUTHSOURCE
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: MONGO_AUTHSOURCE
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db
+            - name: init-script
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mongo-data
+          nfs:
+            server: 192.168.xx.xx #NFS server IP 
+            path: unifi/mongodb
+        - name: init-script
+          configMap:
+            name: mongo-user-script
+            defaultMode: 0755
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: unifi-mongodb
+  namespace: unifi
+  labels:
+    app: unifi-mongodb
+spec:
+  ports:
+    - port: 27017
+  selector:
+    app: unifi-mongodb
+  externalIPs:
+    - 192.168.xx.xx #Traefik external IP
