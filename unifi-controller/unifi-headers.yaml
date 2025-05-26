@@ -1,0 +1,22 @@
+#Headers for Traefik
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: unifi-headers
+  namespace: unifi
+spec:
+  headers:
+    browserXssFilter: true
+    contentTypeNosniff: true
+    forceSTSHeader: true
+    frameDeny: true 
+    referrerPolicy: "no-referrer"
+    stsIncludeSubdomains: true
+    stsPreload: true
+    stsSeconds: 31536000
+    permissionsPolicy: "geolocation=(self), microphone=(), camera=(), fullscreen=*"
+    customFrameOptionsValue: SAMEORIGIN
+    customRequestHeaders:
+      X-Forwarded-Proto: https
+      X-Robots-Tag: noindex, nofollow
