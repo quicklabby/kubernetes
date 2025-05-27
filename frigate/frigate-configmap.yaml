@@ -1,4 +1,4 @@
-#Configmnap example of an AMCREST camera
+#Configmap example of an AMCREST camera
 
 apiVersion: v1
 kind: ConfigMap
