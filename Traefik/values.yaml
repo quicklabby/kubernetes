@@ -17,11 +17,22 @@ deployment:
 ports:
   web:
     port: 80
-    redirectTo: websecure
   websecure:
     port: 443
-    tls:
-      enabled: true
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+    http:
+      tls:
+        enabled: true
 
 ingressRoute:
   dashboard:
