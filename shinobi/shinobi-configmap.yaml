@@ -1,0 +1,13 @@
+# As per github shinobi configuration database: https://gitlab.com/Shinobi-Systems/ShinobiDocker/-/blob/master/mysql-init/user.sql?ref_type=heads
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-initdb
+  namespace: security
+data:
+  init.sql: |
+    CREATE DATABASE IF NOT EXISTS `ccio`;
+    CREATE USER IF NOT EXISTS 'majesticflame'@'%' IDENTIFIED BY '';
+    GRANT ALL PRIVILEGES ON ccio.* TO 'majesticflame'@'%' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
