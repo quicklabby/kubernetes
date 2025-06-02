@@ -60,11 +60,16 @@ spec:
         volumeMounts:
         - name: mariadb-data
           mountPath: /mariadb/persistent/volume/path
+        - name: initdb
+          mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: mariadb-data
           nfs:
             server: #nfs_volume_IP
             path: /mariadb/persistent/volume/path
+        - name: initdb
+          configMap:
+            name: mariadb-initdb
 
 ---
 
