@@ -19,6 +19,7 @@ spec:
       X-Forwarded-Proto: https
 
 ---
+# Use this middleware if you need to ALLOW traffic for a specific local subnet
 
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
