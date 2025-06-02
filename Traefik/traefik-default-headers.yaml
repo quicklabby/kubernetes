@@ -17,3 +17,16 @@ spec:
     customFrameOptionsValue: SAMEORIGIN
     customRequestHeaders:
       X-Forwarded-Proto: https
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: internalapp-whitelist
+  namespace: default
+spec:
+  ipWhiteList:
+    sourceRange:
+      - 192.168.xx.xx/24
+      - 10.0.xx.xx/24
