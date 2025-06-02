@@ -56,7 +56,8 @@ rbac:
 service:
   enabled: true
   type: LoadBalancer
-  externalTrafficPolicy: Local
+  spec:
+    externalTrafficPolicy: Local ## Preserves the source IP address of incoming traffic
   annotations:
     metallb.universe.tf/loadBalancerIPs: 192.168.1.20 # (one of the metallb address DHCP range assigned in BGP config)
 
