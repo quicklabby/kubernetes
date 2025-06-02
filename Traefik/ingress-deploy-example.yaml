@@ -18,5 +18,6 @@ spec:
           port: 80
       middlewares:
         - name: default-headers
+        - name: internalapp-whitelist #Add this line only if you want to allow traffic from a specific local subnet and block all others
   tls:
     secretName: prod-domain-tls
