@@ -52,6 +52,11 @@ spec:
                 secretKeyRef:
                   key: MYSQL_ROOT_PASSWORD
                   name: mariadb-secrets
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: DB_HOST
+                  name: mariadb-secrets
         volumeMounts:
         - name: mariadb-data
           mountPath: /mariadb/persistent/volume/path
