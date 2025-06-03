@@ -16,81 +16,82 @@ spec:
         app: shinobi
     spec:
       containers:
-      - env:
-        - name: PGID
-          value: "1000"
-        - name: PUID
-          value: "1000"
-        - name: TZ
-          value: Europe/London
-        - name: MYSQL_DATABASE
-          valueFrom:
-            secretKeyRef:
-              key: MYSQL_DATABASE
-              name: mariadb-secrets
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: MYSQL_PASSWORD
-              name: mariadb-secrets
-        - name: MYSQL_USER
-          valueFrom:
-            secretKeyRef:
-              key: MYSQL_USER
-              name: mariadb-secrets
-        - name: MYSQL_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: MYSQL_ROOT_PASSWORD
-              name: mariadb-secrets
-        name: shinobi
-        image: registry.gitlab.com/shinobi-systems/shinobi:dev
-        resources:
-          limits:
-            memory: "300Mi"
-#           cpu: "200m"
-          requests:
-            memory: "250Mi"
-#           cpu: "150m"
-        volumeMounts:
-        - name: config
-          mountPath: /config
-        - name: videos
-          mountPath: /videos
-        - name: streams
-          mountPath: /dev/shm/streams
-        - name: plugins
-          mountPath: /home/Shinobi/plugins
-        - name: customautoload
-          mountPath: /libs/customAutoLoad
-        - name: data
-          mountPath: /var/lib/mysql          
+        - name: shinobi
+          image: registry.gitlab.com/shinobi-systems/shinobi:dev
+          env:
+            - name: PGID
+              value: "1000"
+            - name: PUID
+              value: "1000"
+            - name: TZ
+              value: Europe/London
+            - name: SHINOBI_UPDATE
+              value: "false"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secrets
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secrets
+                  key: DB_PASSWORD
+            - name: DB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secrets
+                  key: DB_DATABASE
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secrets
+                  key: DB_HOST
+          resources:
+            limits:
+              memory: "300Mi"
+              # cpu: "200m"
+            requests:
+              memory: "250Mi"
+              # cpu: "150m"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: videos
+              mountPath: /videos
+            - name: streams
+              mountPath: /dev/shm/streams
+            - name: plugins
+              mountPath: /home/Shinobi/plugins
+            - name: customautoload
+              mountPath: /libs/customAutoLoad
+            - name: data
+              mountPath: /var/lib/mysql
       volumes:
-      - name: config
-        nfs:
-          server: #nfs_volume_IP
-          path: /shinobi/persistent/volume/path
-      - name: videos
-        nfs:
-          server: #nfs_volume_IP
-          path: /shinobi/persistent/volume/path
-      - name: streams
-        nfs:
-          server: #nfs_volume_IP
-          path: /shinobi/persistent/volume/path
-      - name: plugins
-        nfs:
-          server: #nfs_volume_IP
-          path: /shinobi/persistent/volume/path  
-      - name: customautoload
-        nfs:
-          server: #nfs_volume_IP
-          path: /shinobi/persistent/volume/path
-      - name: data
-        nfs:
-          server: #nfs_volume_IP
-          path: /shinobi/persistent/volume/path          
-
+        - name: config
+          nfs:
+            server: #nfs_volume_IP
+            path: /shinobi/persistent/volume/path
+        - name: videos
+          nfs:
+            server: #nfs_volume_IP
+            path: /shinobi/persistent/volume/path
+        - name: streams
+          nfs:
+            server: #nfs_volume_IP
+            path: /shinobi/persistent/volume/path
+        - name: plugins
+          nfs:
+            server: #nfs_volume_IP
+            path: /shinobi/persistent/volume/path
+        - name: customautoload
+          nfs:
+            server: #nfs_volume_IP
+            path: /shinobi/persistent/volume/path
+        - name: data
+          nfs:
+            server: #nfs_volume_IP
+            path: /shinobi/persistent/volume/path
 
 ---
 
