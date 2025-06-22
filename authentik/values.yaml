@@ -25,6 +25,12 @@ postgresql:
   enabled: true
   auth:
     password: base64_encoded_password
+  primary:
+    persistence:
+      enabled: true
+      existingClaim: pvc-authentik
+      storageClass: local-path
+      size: 5Gi
 
 redis:
     enabled: true
