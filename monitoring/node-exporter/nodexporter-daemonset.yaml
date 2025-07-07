@@ -16,7 +16,7 @@ spec:
     metadata:
       labels:
         app: node-exporter
-# add the below optionss if you want to depoly a pod in the tainted master node as well        
+# add the below options if you want to depoly a pod in the tainted master node as well        
     spec:
       tolerations:
       - key: "node-role.kubernetes.io/control-plane"  ##name of your control plane
