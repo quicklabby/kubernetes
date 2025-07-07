@@ -11,8 +11,8 @@ data:
   #   - name: Infrastructure alerts
   #     rules:
   #     - alert: High Pod Memory
-  #       expr: sum(container_memory_usage_bytes) > 1
-  #       for: 1m
+  #       expr: sum(container_memory_usage_bytes) > 1e9  # (1GB) max memory
+  #       for: 1m ## time of memory usage running at 1GB
   #       labels:
   #         severity: page
   #       annotations:
