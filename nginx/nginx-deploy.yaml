@@ -9,7 +9,7 @@ metadata:
     keel.sh/policy: minor
     keel.sh/trigger: poll
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: nginx
