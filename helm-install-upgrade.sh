@@ -29,7 +29,7 @@ if [ $anw ==  in ]
    declare -A installs=(
     [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik" #input your value.yaml directory"
     [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager" #input your value.yaml directory"
-    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml authentik" #input your value.yaml directory"
+    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml default" #input your value.yaml directory"
     [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd" #input your value.yaml directory"
     [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system" #input your value.yaml directory"
 )
@@ -50,7 +50,7 @@ elif [ $anw == up ]
    declare -A upgrades=(
     [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik" #input your value.yaml directory"
     [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager" #input your value.yaml directory"
-    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml authentik" #input your value.yaml directory"
+    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml default" #input your value.yaml directory"
     [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd" #input your value.yaml directory"
     [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system" #input your value.yaml directory"
 )
