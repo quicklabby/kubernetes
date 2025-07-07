@@ -5,6 +5,9 @@ metadata:
     app: node-exporter
   name: node-exporter
   namespace: monitoring
+  annotations: 
+    keel.sh/policy: minor
+    keel.sh/trigger: poll  
 spec:
   selector:
     matchLabels:
@@ -13,7 +16,13 @@ spec:
     metadata:
       labels:
         app: node-exporter
+# add the below optionss if you want to depoly a pod in the tainted master node as well        
     spec:
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"  ##name of your control plane
+        operator: "Exists"
+        effect: "NoSchedule"
+####
       containers:
       - args:
         - --path.sysfs=/host/sys
@@ -29,11 +38,9 @@ spec:
             protocol: TCP
         resources:
           limits:
-#           cpu: 250m
-            memory: 70Mi
+            memory: 100Mi
           requests:
-#           cpu: 102m
-            memory: 50Mi
+            memory: 80Mi
         volumeMounts:
         - mountPath: /host/sys
           mountPropagation: HostToContainer
