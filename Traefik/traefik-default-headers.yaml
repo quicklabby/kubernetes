@@ -30,4 +30,4 @@ spec:
   ipWhiteList:
     sourceRange:
       - 192.168.xx.xx/24
-      - 10.0.xx.xx/24
+      - 10.0.0.0/8 #allow all Kubernetes subnet
