@@ -33,6 +33,7 @@ Utilities/tools:
 - Webtop
 - Shinobi
 - Frigate
+- Home Assistant 
 
 Applications Database:
 - Mariadb
