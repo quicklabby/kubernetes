@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webtop
+  namespace: default
+  labels:
+    app: webtop
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webtop
+  template:
+    metadata:
+      labels:
+        app: webtop
+    spec:
+      containers:
+      - name: webtop
+        image: lscr.io/linuxserver/webtop:latest
+        imagePullPolicy: Always  
+        env:
+        - name: PGID
+          value: "1000"    
+        - name: PUID
+          value: "1000" 
+        - name: TZ
+          value: "Europe/Rome" 
+        - name: KEYBOARD
+          value: "en-us-qwerty"
+        - name: SUBFOLDER
+          value: "/"
+        - name: PASSWORD
+          value: "yourpassword"
+        securityContext:
+          seccompProfile:
+            type: Unconfined
+        resources:
+          limits:   
+            shm_size: 1gb
+        resources:
+          limits:
+            memory: "2Gi"
+          requests:
+            memory: "1Gi"
+        volumeMounts: 
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        nfs:
+          server: #your nfs server
+          path: /your/webtop/directory
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: webtop
+  namespace: default
+spec:
+  selector:
+    app: webtop
+  ports:
+    - port: #chosen_port
+      targetPort: 3000
