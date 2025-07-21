@@ -66,5 +66,6 @@ spec:
   selector:
     app: webtop
   ports:
-    - port: #chosen_port
+    - name: http
+      port: 3000
       targetPort: 3000
