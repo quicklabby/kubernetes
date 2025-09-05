@@ -29,7 +29,7 @@ Media/Cloud:
 
 Utilities/tools:
 - Heimdall 
-- Ubiquity Unifi Controller
+- Ubiquity Unifi Network Application 
 - Webtop
 - Shinobi
 - Frigate
