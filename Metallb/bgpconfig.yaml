@@ -13,9 +13,9 @@ metadata:
   name: sample
   namespace: metallb-system
 spec:
-  myASN: (needs to be setup in pfsense)
+  myASN: (needs to be setup in pfsense neightbors)
   peerASN: (needs to be setup in pfsense)
-  peerAddress: 192.168.1.0 (metallb network for assigned DHCP addresses)
+  peerAddress: 192.168.1.0 (pfsense RouterID network for BGP)
 ---
 apiVersion: metallb.io/v1beta1
 kind: BGPAdvertisement
