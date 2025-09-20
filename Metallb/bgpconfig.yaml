@@ -7,7 +7,7 @@ spec:
   addresses:
   - 192.168.1.1-192.168.1.50 (Assign any DHCP range)
 ---
-apiVersion: metallb.io/v1beta2
+apiVersion: metallb.io/v1beta1
 kind: BGPPeer
 metadata:
   name: sample
@@ -22,3 +22,7 @@ kind: BGPAdvertisement
 metadata:
   name: example
   namespace: metallb-system
+specs:
+  ipAddressPools: 
+    - first-pool
+  aggregationLength: 32
