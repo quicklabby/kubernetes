@@ -5,7 +5,7 @@ Hardware components:
 
 - Pfsense Appliance
 - ASUS mini PC (utilizing Proxmox with 2 VMs as worker nodes)
-- Raspberry Pi4 with 8GB RAM (designated as the Master Node)
+- Raspberry Pi4 with 8GB RAM (designated as the Master Node)  # Upgraded to a Ryzen AI 365 mini PC with etcd database
 - Cisco switch
 - Ubiquity Access Point
 
