@@ -34,7 +34,7 @@ Utilities/tools:
 - Shinobi
 - Frigate
 - Home Assistant
-- Collabora for Nextcloud
+- Collabora Online (Nextcloud Integrated)
 - Actual Budget
 - Firefly III
 
