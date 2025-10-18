@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: firefly-cron
+  namespace: firefly
+spec:
+  schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: firefly-cron
+            image: fireflyiii/core:latest
+            imagePullPolicy: Always
+            env:
+              - name: TZ
+                value: "Europe/Rome"
+              - name: STATIC_CRON_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: firefly-secrets
+                    key: STATIC_CRON_TOKEN
+            command:
+              - wget
+              - -qO-
+              - https://actual.yourdomain.com/api/v1/cron/$(STATIC_CRON_TOKEN)
+          restartPolicy: OnFailure
