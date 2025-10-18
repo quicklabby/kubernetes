@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collabora
+  namespace: default
+  labels:
+    app: collabora
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: collabora
+  template:
+    metadata:
+      labels:
+        app: collabora
+    spec:
+      containers:
+      - name: collabora
+        image: collabora/code:latest
+        imagePullPolicy: Always
+        env:
+          - name: server_name
+            value: "collabora.domain.com"
+          - name: aliasgroup1
+            value: "https://your.nextcloud.domain.com"
+          - name: extra_params
+            value: "--o:ssl.enable=false --o:ssl.termination=true"
+        securityContext:
+          seccompProfile:
+            type: Unconfined
+        resources:
+          limits:
+            shm_size: 1gb
+        resources:
+          limits:
+            memory: "2Gi"
+          requests:
+            memory: "1Gi"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        nfs:
+          server: # Your NFS server IP
+          path: /your/collabora/directory
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: collabora
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`collabora.yourdomain.com`)
+      kind: Rule
+      services:
+        - name: collabora
+          port: 9980
+      middlewares:
+        - name: default-headers
+        - name: internalapp-whitelist # Optional
+  tls:
+    secretName: prod-yourcert-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: collabora
+  namespace: default
+spec:
+  selector:
+    app: collabora
+  ports:
+  - name: http
+    targetPort: 9980
+    port: 9980
