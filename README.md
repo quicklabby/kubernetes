@@ -66,12 +66,14 @@ Automated Helm installation/upgrade bash script:
 Step 1:
   K3s installation
 
-1. Install K3s on the master node:
+1. Install K3s on the master node (Traefik and metallb will be installed later with custom values):
+
 For ETCD database:
 ```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --cluster-init --disable=traefik --disable=servicelb" sh -s -```
-For default sqlite (Recommended for Raspberry Pi)
-```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable=traefik --disable=servicelb" sh -s -```
-(Traefik and metallb will be installed later with custom values)
+
+For default sqlite (Recommended for Raspberry Pi with SD card)
+```curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable=traefik --disable=servicelb" sh -s -``` 
+
 (If needed, copy /etc/rancher/k3s/k3s.yaml to your user area ~/.kube/config (permissions 600), and add ```export KUBECONFIG=~/.kube/config``` to your ~/.bashrc.
 
 3. Get your token for worker nodes deployment:
