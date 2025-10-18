@@ -33,7 +33,10 @@ Utilities/tools:
 - Webtop
 - Shinobi
 - Frigate
-- Home Assistant 
+- Home Assistant
+- Collabora for Nextcloud
+- Actual Budget
+- Firefly III
 
 Applications Database:
 - Mariadb
