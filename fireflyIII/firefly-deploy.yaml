@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firefly
+  namespace: firefly
+  labels:
+    app: firefly
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: firefly
+  template:
+    metadata:
+      labels:
+        app: firefly
+    spec:
+      containers:
+        - name: firefly
+          image: fireflyiii/core:latest
+          imagePullPolicy: Always
+          securityContext:
+            seccompProfile:
+              type: Unconfined
+          resources:
+            limits:
+              memory: "2Gi"
+            requests:
+              memory: "1Gi"
+          envFrom:
+            - secretRef:
+                name: firefly-secrets
+          volumeMounts:
+            - name: upload
+              mountPath: /var/www/html/storage/upload
+      volumes:
+        - name: upload
+          persistentVolumeClaim:
+            claimName: pvc-firefly-upload
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: firefly
+  namespace: firefly
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`actual.yourdomain.com`)
+      kind: Rule
+      services:
+        - name: firefly
+          port: 5000
+      middlewares:
+        - name: default-headers
+        - name: internalapp-whitelist # Optional
+  tls:
+     secretName: prod-yourcert-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: firefly
+  namespace: firefly
+spec:
+  selector:
+    app: firefly
+  ports:
+  - name: http
+    targetPort: 8080
+    port: 5000
