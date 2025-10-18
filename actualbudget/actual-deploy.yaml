@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actualbudget
+  namespace: default
+  labels:
+    app: actualbudget
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: actualbudget
+  template:
+    metadata:
+      labels:
+        app: actualbudget
+    spec:
+      containers:
+      - name: actualbudget
+        image: actualbudget/actual-server:latest
+        imagePullPolicy: Always
+        securityContext:
+          seccompProfile:
+            type: Unconfined
+        resources:
+          limits:
+            shm_size: 1gb
+        resources:
+          limits:
+            memory: "2Gi"
+          requests:
+            memory: "1Gi"
+        volumeMounts:
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        nfs:
+          server: #Your NFS server IP
+          path: /your/acualbudget/directory
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: actualbudget
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`actual.domain.com`)
+      kind: Rule
+      services:
+        - name: actualbudget
+          port: 5006
+      middlewares:
+        - name: default-headers
+        - name: internalapp-whitelist #Optional
+  tls:
+    secretName: prod-yourcert-tls
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: actualbudget
+  namespace: default
+spec:
+  selector:
+    app: actualbudget
+  ports:
+  - name: http
+    targetPort: 5006
