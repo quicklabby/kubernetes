@@ -34,10 +34,10 @@ spec:
           requests:
             memory: "1Gi"
         volumeMounts:
-        - name: config
-          mountPath: /config
+        - name: data
+          mountPath: /data
       volumes:
-      - name: config
+      - name: data
         nfs:
           server: #Your NFS server IP
           path: /your/acualbudget/directory
