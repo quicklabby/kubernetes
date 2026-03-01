@@ -1,13 +1,11 @@
-globalArguments:
-  - "--global.sendanonymoususage=false"
-  - "--global.checknewversion=false"
-
 additionalArguments:
   - "--serversTransport.insecureSkipVerify=true"
   - "--log.level=DEBUG"
+  - "--global.sendanonymoususage=false"
+  - "--global.checknewversion=false"
 
 deployment:
-  enabled: true  
+  enabled: true
   replicas: 2
   annotations: {}
   podAnnotations: {}
@@ -17,19 +15,13 @@ deployment:
 ports:
   web:
     port: 80
-  websecure:
-    port: 443
-
-entryPoints:
-  web:
-    address: ":80"
     http:
       redirections:
         entryPoint:
           to: websecure
           scheme: https
   websecure:
-    address: ":443"
+    port: 443
     http:
       tls:
         enabled: true
@@ -48,7 +40,7 @@ providers:
     enabled: true
     allowExternalNameServices: false
     publishedService:
-      enabled: false
+      enabled: true
 
 rbac:
   enabled: true
@@ -61,10 +53,10 @@ service:
   annotations:
     metallb.universe.tf/loadBalancerIPs: 192.168.1.20 # (one of the metallb address DHCP range assigned in BGP config)
 
-resources: 
-   requests:
-     cpu: "100m"
-     memory: "50Mi"
-   limits:
-     cpu: "300m"
-     memory: "150Mi"
+resources:
+  requests:
+    cpu: "100m"
+    memory: "50Mi"
+  limits:
+    cpu: "300m"
+    memory: "150Mi"
