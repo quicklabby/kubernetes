@@ -5,9 +5,9 @@ metadata:
     app: node-exporter
   name: node-exporter
   namespace: monitoring
-  annotations: 
+  annotations:
     keel.sh/policy: minor
-    keel.sh/trigger: poll  
+    keel.sh/trigger: poll
 spec:
   selector:
     matchLabels:
@@ -16,44 +16,64 @@ spec:
     metadata:
       labels:
         app: node-exporter
-# add the below options if you want to deploy a daemonset pod in the tainted master node as well        
+      annotations:
+        prometheus.io/scrape: "false"
     spec:
       tolerations:
-      - key: "node-role.kubernetes.io/control-plane"  ##name of your control plane
-        operator: "Exists"
-        effect: "NoSchedule"
-####
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+          value: ""
+        - key: "dedicated"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
       containers:
-      - args:
-        - --path.sysfs=/host/sys
-        - --path.rootfs=/host/root
-        - --no-collector.wifi
-        - --no-collector.hwmon
-        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
-        - --collector.netclass.ignored-devices=^(veth.*)$
-        name: node-exporter
-        image: prom/node-exporter
-        ports:
-          - containerPort: 9100
-            protocol: TCP
-        resources:
-          limits:
-            memory: 100Mi
-          requests:
-            memory: 80Mi
-        volumeMounts:
-        - mountPath: /host/sys
-          mountPropagation: HostToContainer
-          name: sys
-          readOnly: true
-        - mountPath: /host/root
-          mountPropagation: HostToContainer
-          name: root
-          readOnly: true
+        - name: node-exporter
+          image: prom/node-exporter:latest
+          args:
+            - --path.procfs=/host/proc
+            - --path.sysfs=/host/sys
+            - --path.rootfs=/host/root
+            - --no-collector.wifi
+            - --no-collector.hwmon
+            - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+            - --collector.netclass.ignored-devices=^(veth.*)$
+          ports:
+            - containerPort: 9100
+              protocol: TCP
+              name: metrics
+          resources:
+            limits:
+              memory: 100Mi
+              cpu: 100m
+            requests:
+              memory: 80Mi
+              cpu: 50m
+          securityContext:
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+          volumeMounts:
+            - mountPath: /host/proc
+              mountPropagation: HostToContainer
+              name: proc
+              readOnly: true
+            - mountPath: /host/sys
+              mountPropagation: HostToContainer
+              name: sys
+              readOnly: true
+            - mountPath: /host/root
+              mountPropagation: HostToContainer
+              name: root
+              readOnly: true
       volumes:
-      - hostPath:
-          path: /sys
-        name: sys
-      - hostPath:
-          path: /
-        name: root
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: root
+          hostPath:
+            path: /
