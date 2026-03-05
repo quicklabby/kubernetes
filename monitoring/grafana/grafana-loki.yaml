@@ -1,0 +1,151 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki
+  namespace: monitoring
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+  template:
+    metadata:
+      labels:
+        app: loki
+    spec:
+      containers:
+      - name: loki
+        image: grafana/loki:latest
+        args:
+          - -config.file=/etc/loki/loki-config.yaml
+        ports:
+        - containerPort: 3100
+          name: http-metrics
+          protocol: TCP
+        - containerPort: 9096
+          name: grpc
+          protocol: TCP
+          name: http
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+          requests:
+            memory: "512Mi"
+            cpu: "200m"
+        volumeMounts:
+          - name: config
+            mountPath: /etc/loki
+          - name: storage
+            mountPath: /loki
+      volumes:
+        - name: config
+          configMap:
+            name: loki-config
+        - name: storage
+          persistentVolumeClaim:
+            claimName: pvc-loki
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-service-internal
+  namespace: monitoring
+  labels:
+    app: loki
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3100
+    targetPort: 3100
+    protocol: TCP
+    name: http-metrics
+  - port: 9096
+    targetPort: 9096
+    protocol: TCP
+    name: grpc
+  selector:
+    app: loki
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-service-external
+  namespace: monitoring
+  labels:
+    app: loki
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3100
+    targetPort: 3100
+    protocol: TCP
+    name: http-metrics
+  selector:
+    app: loki
+  externalIPs:
+    - ##Traefik_Ingress_IP
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-config
+  namespace: monitoring
+data:
+  loki-config.yaml: |
+    auth_enabled: false
+
+    server:
+      http_listen_port: 3100
+      grpc_listen_port: 9096
+
+    common:
+      path_prefix: /loki
+      storage:
+        filesystem:
+          chunks_directory: /loki/chunks
+          rules_directory: /loki/rules
+      replication_factor: 1
+      ring:
+        kvstore:
+          store: inmemory
+
+    schema_config:
+      configs:
+        - from: 2020-10-24
+          store: tsdb
+          object_store: filesystem
+          schema: v13
+          index:
+            prefix: index_
+            period: 24h
+
+    limits_config:
+      ingestion_rate_mb: 16
+      ingestion_burst_size_mb: 32
+      max_query_length: 7d
+      retention_period: 168h
+      max_line_size: 2MB
+
+    compactor:
+      working_directory: /loki/compactor
+      retention_enabled: true
+      retention_delete_delay: 2h
+      delete_request_store: filesystem
+
+    storage_config:
+      filesystem:
+        directory: /loki/chunks
+
+    analytics:
+      reporting_enabled: 
