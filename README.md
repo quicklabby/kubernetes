@@ -1,17 +1,4 @@
 # K3s Mini Cluster Homelab
-The project involves the configuration of a 3-node mini cluster, incorporating a Metallb load balancer via BGP and Traefik as the Ingress Controller. Cert Manager is employed to automate Let's Encrypt certificate management, utilizing the DNS challenge method over Cloudflare.
-
-Hardware components:
-
-- Pfsense Appliance
-- ASUS mini PC (utilizing Proxmox with 2 VMs as worker nodes)
-- Raspberry Pi4 with 8GB RAM (designated as the Master Node)  ```Upgraded to a more powerful mini PC with etcd database```
-- Cisco switch
-- Ubiquity Access Point
-
-This undertaking focuses on establishing a K3s cluster within resource constraints, utilizing an ASUS mini PC and a Raspberry Pi4. The ASUS mini PC features 2 SSDs and 32GB of RAM, shared with Proxmox, which hosts 2 VMs allocated with 14GB RAM each for worker nodes. Given the ASUS mini PC's limitations for high availability clustering, each node is installed on separate internal SSDs to ensure continued operation in the event of one disk failure. Persistent data for all pods is stored on an external 256GB NVME volume, connected to the ASUS mini PC via USB 3.1 gen2 and shared between the worker nodes for simplified backup and replacement procedures. This external NVME volume is mounted to Proxmox and the worker nodes as an NFS volume. The Raspberry Pi4, equipped with a 128GB SD card, serves as a tainted master node, overseeing pod scheduling exclusively within the worker nodes.
-
-# Mini K3s Cluster with Load Balancing and Automated Certificates
 
 This project involves the configuration of a **3-node mini cluster**, featuring:
 
