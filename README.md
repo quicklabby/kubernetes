@@ -43,7 +43,8 @@ Applications Database:
 - Mongodb
 
 Monitoring/Logs:
-- Grafana
+- Grafana/Alloy
+- Loki
 - InfluxDB
 - Prometheus
 - Node Exporter
