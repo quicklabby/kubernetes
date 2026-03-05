@@ -1,0 +1,178 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alloy-config
+  namespace: monitoring
+data:
+  config.alloy: |
+    // ========================================
+    // KUBERNETES METRICS (cAdvisor + Kubelet)
+    // ========================================
+    discovery.kubernetes "nodes" {
+      role = "node"
+    }
+
+    // cAdvisor - container resource metrics
+    prometheus.scrape "cadvisor" {
+      targets           = discovery.kubernetes.nodes.targets
+      scheme            = "https"
+      bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+      metrics_path      = "/metrics/cadvisor"
+      scrape_interval   = "30s"
+      tls_config {
+        insecure_skip_verify = true
+      }
+      clustering {
+        enabled = true
+      }
+      forward_to = [prometheus.relabel.cadvisor.receiver]
+    }
+
+    prometheus.relabel "cadvisor" {
+      forward_to = [prometheus.remote_write.default.receiver]
+      rule {
+        target_label = "job"
+        replacement  = "cadvisor"
+      }
+    }
+
+    // Kubelet - kubernetes node and pod metrics
+    prometheus.scrape "kubelet" {
+      targets           = discovery.kubernetes.nodes.targets
+      scheme            = "https"
+      bearer_token_file = "/var/run/secrets/kubernetes.io/serviceaccount/token"
+      metrics_path      = "/metrics"
+      scrape_interval   = "30s"
+      tls_config {
+        insecure_skip_verify = true
+      }
+      clustering {
+        enabled = true
+      }
+      forward_to = [prometheus.relabel.kubelet.receiver]
+    }
+
+    prometheus.relabel "kubelet" {
+      forward_to = [prometheus.remote_write.default.receiver]
+      rule {
+        target_label = "job"
+        replacement  = "kubelet"
+      }
+    }
+
+    // ========================================
+    // NODE METRICS 
+    // ========================================
+    prometheus.exporter.unix "node" {
+      procfs_path = "/host/proc"
+      sysfs_path  = "/host/sys"
+      rootfs_path = "/host/root"
+
+      enable_collectors = [
+        "cpu",
+        "meminfo",
+        "diskstats",
+        "filesystem",
+        "netdev",
+        "loadavg",
+        "stat",
+        "time",
+        "uname",
+        "vmstat",
+        "pressure",
+      ]
+
+      filesystem {
+        mount_points_exclude = "^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+|run/k3s/.+)($|/)"
+      }
+    }
+
+    prometheus.scrape "node" {
+      targets         = prometheus.exporter.unix.node.targets
+      scrape_interval = "30s"
+      forward_to      = [prometheus.relabel.node.receiver]
+    }
+
+    prometheus.relabel "node" {
+      forward_to = [prometheus.remote_write.default.receiver]
+      rule {
+        target_label = "job"
+        replacement  = "node-exporter"
+      }
+      rule {
+        source_labels = ["__host__"]
+        target_label  = "instance"
+      }
+    }
+
+    // ========================================
+    // PROMETHEUS REMOTE WRITE
+    // ========================================
+    prometheus.remote_write "default" {
+      endpoint {
+        url = "http://<<traefik.ingress.ip>>:9090/api/v1/write"      # Traefik_Ingress_IP
+      }
+    }
+
+    // ========================================
+    // LOGS COLLECTION 
+    // ========================================
+    discovery.kubernetes "pods" {
+      role = "pod"
+    }
+
+    // Extract Kubernetes metadata AND filter keel here
+    // __meta_kubernetes_* labels are only available at this stage
+    discovery.relabel "pods_filtered" {
+      targets = discovery.kubernetes.pods.targets
+
+      // Drop keel pod - produces oversized log entries
+      rule {
+        source_labels = ["__meta_kubernetes_pod_label_app"]
+        regex         = "keel"
+        action        = "drop"
+      }
+      rule {
+        source_labels = ["__meta_kubernetes_pod_name"]
+        regex         = "keel-.*"
+        action        = "drop"
+      }
+
+      // Extract namespace label
+      rule {
+        source_labels = ["__meta_kubernetes_namespace"]
+        target_label  = "namespace"
+      }
+      // Extract pod name label
+      rule {
+        source_labels = ["__meta_kubernetes_pod_name"]
+        target_label  = "pod"
+      }
+      // Extract container name label
+      rule {
+        source_labels = ["__meta_kubernetes_pod_container_name"]
+        target_label  = "container"
+      }
+      // Extract node name label
+      rule {
+        source_labels = ["__meta_kubernetes_node_name"]
+        target_label  = "node"
+      }
+      // Set job as namespace/container for easy log browsing
+      rule {
+        source_labels = ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_container_name"]
+        separator     = "/"
+        target_label  = "job"
+      }
+    }
+
+    loki.source.kubernetes "pods" {
+      targets    = discovery.relabel.pods_filtered.output
+      forward_to = [loki.write.default.receiver]
+    }
+
+    loki.write "default" {
+      endpoint {
+        url = "<<traefik.ingress.ip>>:3100/loki/api/v1/push"  # Traefik_Ingress_IP
+      }
+    }
