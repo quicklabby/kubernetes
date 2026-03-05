@@ -47,7 +47,7 @@ Monitoring/Logs:
 - Loki
 - InfluxDB
 - Prometheus
-- Node Exporter
+- Node Exporter (Deprecated in the setup)
 
 CI/CD
 - ArgoCD
