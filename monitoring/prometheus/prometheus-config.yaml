@@ -21,7 +21,7 @@ data:
       - /etc/prometheus/prometheus.rules
 
     remote_write:
-      - url: "http://<<traefik.ingress.ip>>:9090/api/v1/write"
+      - url: "http://<<traefik.ingress.ip>>:9090/api/v1/write"  ##Add Traefik_Ingress_IP
 
     scrape_configs:
 
@@ -33,7 +33,7 @@ data:
       # Grafana Alloy self-monitoring
       - job_name: 'grafana-alloy'
         static_configs:
-          - targets: ['<<traefik.ingress.ip>>':12345']
+          - targets: ['<<traefik.ingress.ip>>':12345']  ##Add Traefik_Ingress_IP
         metrics_path: /metrics
         relabel_configs:
           - source_labels: [__address__]
