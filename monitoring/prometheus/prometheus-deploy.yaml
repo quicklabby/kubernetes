@@ -5,6 +5,9 @@ metadata:
   namespace: monitoring
   labels:
     app: prometheus-server
+  annotations:
+    keel.sh/policy: minor
+    keel.sh/trigger: poll    
 spec:
   replicas: 1
   selector:
@@ -17,15 +20,16 @@ spec:
     spec:
       containers:
         - name: prometheus
-          image: prom/prometheus
+          image: prom/prometheus:latest
           resources:
-            limits:
-              memory: "800Mi"
+            limits: 
+              memory: "2Gi"
             requests:
-              memory: "400Mi"
+              memory: "1Gi"
           args:
             - "--config.file=/etc/prometheus/prometheus.yml"
             - "--storage.tsdb.path=/prometheus/"
+            - "--web.enable-remote-write-receiver"
           ports:
             - containerPort: 9090
           volumeMounts:
