@@ -11,6 +11,38 @@ Hardware components:
 
 This undertaking focuses on establishing a K3s cluster within resource constraints, utilizing an ASUS mini PC and a Raspberry Pi4. The ASUS mini PC features 2 SSDs and 32GB of RAM, shared with Proxmox, which hosts 2 VMs allocated with 14GB RAM each for worker nodes. Given the ASUS mini PC's limitations for high availability clustering, each node is installed on separate internal SSDs to ensure continued operation in the event of one disk failure. Persistent data for all pods is stored on an external 256GB NVME volume, connected to the ASUS mini PC via USB 3.1 gen2 and shared between the worker nodes for simplified backup and replacement procedures. This external NVME volume is mounted to Proxmox and the worker nodes as an NFS volume. The Raspberry Pi4, equipped with a 128GB SD card, serves as a tainted master node, overseeing pod scheduling exclusively within the worker nodes.
 
+# Mini K3s Cluster with Load Balancing and Automated Certificates
+
+This project involves the configuration of a **3-node mini cluster**, featuring:
+
+- **Metallb** load balancer configured via BGP  
+- **Traefik** as the Ingress Controller  
+- **Cert-Manager** for automated Let's Encrypt certificate management using the DNS challenge method with Cloudflare  
+
+---
+
+## Hardware Components
+
+- **Pfsense Appliance**  
+- **ASUS Mini PC** (running Proxmox with 2 VMs as worker nodes)  
+- **Ryzen AI 9 Mini PC** (Master Node running on Proxmox)  
+- **Cisco Switch**  
+- **Ubiquity Access Point**  
+
+---
+
+## Cluster Overview
+
+The cluster is designed to operate efficiently within limited hardware resources while maintaining high availability:
+
+- The **ASUS Mini PC** features **32GB RAM** and **2 internal SSDs**, shared with Proxmox. Proxmox hosts **2 VMs** as worker nodes, each allocated **14GB RAM**. To mitigate disk failure risks, each VM is installed on a separate internal SSD.  
+
+- **Persistent storage** for all pods is provided via a **256GB NVMe external drive** connected through USB 3.1 Gen2. This NVMe drive is mounted as an **NFS volume** on Proxmox and shared between the worker nodes to simplify backups and replacements.  
+
+- The **Master Node**, the **Ryzen AI 9 Mini PC**, runs the **etcd database** and is **tainted** to prevent workloads from scheduling on it, focusing exclusively on cluster management and orchestration.  
+
+This configuration ensures reliable operation of a **K3s cluster**, with separate storage for critical components and dedicated resources for both master and worker nodes.
+
 To enhance security, IP whitelisting is implemented using IngressRoute Custom Resources, restricting access to certain services based on client IP addresses.
 
 Webserver:
