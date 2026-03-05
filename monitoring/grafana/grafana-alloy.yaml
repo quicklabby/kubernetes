@@ -100,7 +100,7 @@ spec:
       targetPort: 12345
       port: 12345
   externalIPs:
-    - ##add traefik ingress IP here if no domain will be used##
+    -  ##Add Traefik_Ingress IP
 
 ---
 
