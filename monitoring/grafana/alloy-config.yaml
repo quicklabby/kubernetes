@@ -110,7 +110,7 @@ data:
     // ========================================
     prometheus.remote_write "default" {
       endpoint {
-        url = "http://<<traefik.ingress.ip>>:9090/api/v1/write"      # Traefik_Ingress_IP
+        url = "http://<<traefik.ingress.ip>>:9090/api/v1/write"      ##Add Traefik_Ingress IP
       }
     }
 
