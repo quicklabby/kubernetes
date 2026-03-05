@@ -1,3 +1,5 @@
+#### This Prometheus configs are written to work with Grafana Alloy and Loki (do not work with Node Exporter)
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,33 +8,38 @@ metadata:
   labels:
     name: prometheus-server-conf
 data:
-  # prometheus.rules: |-
-  #   groups:
-  #   - name: Infrastructure alerts
-  #     rules:
-  #     - alert: High Pod Memory
-  #       expr: sum(container_memory_usage_bytes) > 1e9  # (1GB) max memory
-  #       for: 1m ## time of memory usage running at 1GB
-  #       labels:
-  #         severity: page
-  #       annotations:
-  #         summary: High Memory Usage
   prometheus.yml: |-
     global:
       scrape_interval: 15s
       scrape_timeout: 10s
 
-    scrape_configs:
-      # Scrape Node Exporter via Kubernetes service discovery
-      - job_name: 'node-exporter'
-        kubernetes_sd_configs:
-          - role: endpoints
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_endpoints_name]
-            regex: 'node-exporter'
-            action: keep
+    storage:
+      tsdb:
+        out_of_order_time_window: 30m
 
-      # Scrape Kubernetes API server
+    rule_files:
+      - /etc/prometheus/prometheus.rules
+
+    remote_write:
+      - url: "http://<<traefik.ingress.ip>>:9090/api/v1/write"
+
+    scrape_configs:
+
+      # Prometheus self-monitoring
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+
+      # Grafana Alloy self-monitoring
+      - job_name: 'grafana-alloy'
+        static_configs:
+          - targets: ['<<traefik.ingress.ip>>':12345']
+        metrics_path: /metrics
+        relabel_configs:
+          - source_labels: [__address__]
+            target_label: instance
+
+      # Kubernetes API server
       - job_name: 'kubernetes-apiservers'
         kubernetes_sd_configs:
           - role: endpoints
@@ -45,25 +52,32 @@ data:
             action: keep
             regex: default;kubernetes;https
 
-      # Scrape Kubernetes Nodes
-      - job_name: 'kubernetes-nodes'
-        kubernetes_sd_configs:
-          - role: node
-        scheme: https
-        tls_config:
-          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-        relabel_configs:
-          - action: labelmap
-            regex: __meta_kubernetes_node_label_(.+)
-          - target_label: __address__
-            replacement: kubernetes.default.svc:443
-          - source_labels: [__meta_kubernetes_node_name]
-            regex: (.+)
-            target_label: __metrics_path__
-            replacement: /api/v1/nodes/${1}/proxy/metrics
+      # kube-state-metrics
+      - job_name: 'kube-state-metrics'
+        static_configs:
+          - targets: ['my-kube-state-metrics.default.svc.cluster.local:8080']
 
-      # Scrape Kubernetes Pods
+      # CoreDNS
+      - job_name: 'coredns'
+        kubernetes_sd_configs:
+          - role: endpoints
+            namespaces:
+              names: ['kube-system']
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_service_name]
+            action: keep
+            regex: kube-dns
+          - source_labels: [__meta_kubernetes_endpoint_port_name]
+            action: keep
+            regex: metrics
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            target_label: service
+          - source_labels: [__meta_kubernetes_pod_name]
+            target_label: pod
+
+      # Kubernetes Pods
       - job_name: 'kubernetes-pods'
         kubernetes_sd_configs:
           - role: pod
@@ -88,56 +102,3 @@ data:
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: kubernetes_pod_name
-
-      # Scrape Kubernetes State Metrics (e.g., from kube-state-metrics)
-      - job_name: 'kube-state-metrics'
-        static_configs:
-          - targets: ['kube-state-metrics.kube-system.svc.cluster.local:8080']
-
-      # Scrape cAdvisor metrics for Kubernetes Nodes
-      - job_name: 'kubernetes-cadvisor'
-        kubernetes_sd_configs:
-          - role: node
-        scheme: https
-        tls_config:
-          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-        relabel_configs:
-          - action: labelmap
-            regex: __meta_kubernetes_node_label_(.+)
-          - target_label: __address__
-            replacement: kubernetes.default.svc:443
-          - source_labels: [__meta_kubernetes_node_name]
-            regex: (.+)
-            target_label: __metrics_path__
-            replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
-
-      # Scrape Kubernetes Service Endpoints
-      - job_name: 'kubernetes-service-endpoints'
-        kubernetes_sd_configs:
-          - role: endpoints
-        relabel_configs:
-          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
-            action: keep
-            regex: true
-          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
-            action: replace
-            target_label: __scheme__
-            regex: (https?)
-          - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
-            action: replace
-            target_label: __metrics_path__
-            regex: (.+)
-          - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
-            action: replace
-            target_label: __address__
-            regex: ([^:]+)(?::\d+)?;(\d+)
-            replacement: $1:$2
-          - action: labelmap
-            regex: __meta_kubernetes_service_label_(.+)
-          - source_labels: [__meta_kubernetes_namespace]
-            action: replace
-            target_label: kubernetes_namespace
-          - source_labels: [__meta_kubernetes_service_name]
-            action: replace
-            target_label: kubernetes_name
