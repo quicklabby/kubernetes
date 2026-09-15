@@ -22,7 +22,7 @@ This project involves the configuration of a **3-node mini cluster**, featuring:
 
 The cluster is designed to operate efficiently within limited hardware resources while maintaining high availability:
 
-- The **ASUS Mini PC** features **32GB RAM** and **2 internal SSDs**, shared with Proxmox. Proxmox hosts **2 VMs** as worker nodes, each allocated **14GB RAM**. To mitigate disk failure risks, each VM is installed on a separate internal SSD.  
+- The **Ryzen 7730U Mini PC** features **32GB RAM** and **2 internal SSDs**, shared with Proxmox. Proxmox hosts **2 VMs** as worker nodes, each allocated **14GB RAM**. To mitigate disk failure risks, each VM is installed on a separate internal SSD.  
 
 - **Persistent storage** for all pods is provided via a **256GB NVMe external drive** connected through USB 3.1 Gen2. This NVMe drive is mounted as an **NFS volume** on Proxmox and shared between the worker nodes to simplify backups and replacements.  
 
