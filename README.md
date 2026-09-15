@@ -11,7 +11,7 @@ This project involves the configuration of a **3-node mini cluster**, featuring:
 ## Hardware Components
 
 - **Pfsense Appliance**  
-- **ASUS Mini PC** (running Proxmox with 2 VMs as worker nodes)  
+- **Ryzen 7730U Mini PC** (running Proxmox with 2 VMs as worker nodes)  
 - **Ryzen AI 9 Mini PC** (Master Node running on Proxmox)  
 - **Cisco Switch**  
 - **Ubiquity Access Point**  
