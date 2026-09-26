@@ -110,7 +110,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: unifi
-  namespace: default
+  namespace: unifi
+  annotations:
+    metallb.universe.tf/loadBalancerIPs: # mmetallb assigned IP 
 spec:
   selector:
     app: unifi
@@ -142,8 +144,6 @@ spec:
     - name: syslog-port
       port: 5514
       protocol: UDP
-  externalIPs:
-    - ##add traefik ingress IP here if no domain will be used##
 
 ---
 
