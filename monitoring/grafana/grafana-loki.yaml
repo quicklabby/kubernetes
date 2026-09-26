@@ -72,28 +72,6 @@ spec:
   selector:
     app: loki
 
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: loki-service-external
-  namespace: monitoring
-  labels:
-    app: loki
-spec:
-  type: ClusterIP
-  ports:
-  - port: #chosen_port
-    targetPort: 3100
-    protocol: TCP
-    name: http-metrics
-  selector:
-    app: loki
-  externalIPs:
-    - ##Traefik_Ingress_IP
-
 ---
 
 apiVersion: v1
