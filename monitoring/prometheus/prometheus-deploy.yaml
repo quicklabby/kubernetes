@@ -50,26 +50,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: prometheus-service-external
-  namespace: monitoring
-spec:
-  selector:
-    app: prometheus-server
-  ports:
-    - port: #chosen_port
-      targetPort: 9090
-  externalIPs:
-    - ##Traefik_Ingress_IP
-
----
-apiVersion: v1
-kind: Service
-metadata:
   name: prometheus-service-internal
   namespace: monitoring
 spec:
   selector:
     app: prometheus-server
   ports:
-    - port: #chosen_port
+    - port: 9090
       targetPort: 9090
+      protocol: TCP
+  type: ClusterIP
+
