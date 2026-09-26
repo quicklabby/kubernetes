@@ -78,9 +78,7 @@ metadata:
   labels:
     app: unifi-mongodb
 spec:
-  ports:
-    - port: 27017
   selector:
     app: unifi-mongodb
-  externalIPs:
-    - #Traefik external IP
+  ports:
+    - port: 27017
