@@ -114,7 +114,7 @@ Re-run the installation commands on each node at time starting from the master n
 Step 2:
    Install Metallb desired version with BGP values file 
 
-```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.9/config/manifests/metallb-frr.yaml -f bgpconfig.yaml```
+```kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.16.1/config/manifests/metallb-frr.yaml -f bgpconfig.yaml```
 (bgpconfig values includes pfsense neightbor configuration for the metallb frr yaml)
 
 https://metallb.universe.tf/installation/
