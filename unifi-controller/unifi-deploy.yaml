@@ -112,8 +112,11 @@ metadata:
   name: unifi
   namespace: unifi
   annotations:
-    metallb.universe.tf/loadBalancerIPs: # mmetallb assigned IP 
+    metallb.io/allow-shared-ip: traefik-unifi
 spec:
+  type: LoadBalancer
+  loadBalancerIP: ## Same traefik IP assignedn by metallb
+  externalTrafficPolicy: Cluster
   selector:
     app: unifi
   ports:
@@ -144,6 +147,7 @@ spec:
     - name: syslog-port
       port: 5514
       protocol: UDP
+
 
 ---
 
