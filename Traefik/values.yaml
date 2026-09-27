@@ -51,7 +51,7 @@ service:
   annotations:
     metallb.io/allow-shared-ip: traefik-unifi
   spec:
-    externalTrafficPolicy: Cluster ## Use local instead to preserves the source IP address of incoming traffic, if you want to use middleware "internalapp-whitelist"
+    externalTrafficPolicy: Cluster ## Use Local instead of Cluster to preserves the source IP address of incoming traffic, if you want to use middleware "internalapp-whitelist"
     loadBalancerIP: 192.168.63.50
 
 resources:
