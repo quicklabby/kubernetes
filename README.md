@@ -148,7 +148,7 @@ Step 4:
 ```helm repo update```
 
 4. Install certmanager and apply values with cdrs:
-```helm install cert-manager jetstack/cert-manager --namespace cert-manager --values=values.yaml --version v1.9.1```
+```helm install cert-manager jetstack/cert-manager --namespace cert-manager --values=values.yaml --version v1.21.2```
 
 https://artifacthub.io/packages/helm/cert-manager/cert-manager
 
