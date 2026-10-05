@@ -2,19 +2,17 @@ apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: default-headers
-  namespace: default
+  namespace: traefik-internal
 spec:
   headers:
     browserXssFilter: true
     contentTypeNosniff: true
     forceSTSHeader: true
-    frameDeny: true 
+    frameDeny: true
     referrerPolicy: "no-referrer"
     stsIncludeSubdomains: true
-    stsPreload: true
-    stsSeconds: 15552000
+    stsSeconds: 31536000
     permissionsPolicy: "geolocation=(self), microphone=(), camera=(), fullscreen=*"
-    customFrameOptionsValue: SAMEORIGIN
     customRequestHeaders:
       X-Forwarded-Proto: https
 
