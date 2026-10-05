@@ -1,28 +1,54 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: first-pool
+  name: external-pool
   namespace: metallb-system
 spec:
   addresses:
-  - 192.168.1.1-192.168.1.50 (Assign any DHCP range)
+    - 192.168.30.2-192.168.30.10  ## Assign any pool for public applications
+  autoAssign: false
+
 ---
+
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: internal-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.20.2-192.168.20.10 ## Assign any pool for internal only applications
+    
+---
+
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: external
+  namespace: metallb-system
+spec:
+  ipAddressPools: [external-pool]
+  aggregationLength: 32
+
+---
+
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  name: internal
+  namespace: metallb-system
+spec:
+  ipAddressPools: [internal-pool]
+  aggregationLength: 32
+  
+---
+
 apiVersion: metallb.io/v1beta1
 kind: BGPPeer
 metadata:
   name: sample
   namespace: metallb-system
 spec:
-  myASN: (needs to be setup in pfsense neightbors)
-  peerASN: (needs to be setup in pfsense)
-  peerAddress: 192.168.1.0 (pfsense RouterID network for BGP)
----
-apiVersion: metallb.io/v1beta1
-kind: BGPAdvertisement
-metadata:
-  name: example
-  namespace: metallb-system
-specs:
-  ipAddressPools: 
-    - first-pool
-  aggregationLength: 32
+  myASN: # your pfsense ASN number
+  peerASN: # your pfsense peerASN number
+  peerAddress: ## your pfsense IP peer IP address
