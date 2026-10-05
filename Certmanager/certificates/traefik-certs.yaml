@@ -100,4 +100,4 @@ spec:
     name: letsencrypt-production
     kind: ClusterIssuer
   dnsNames:
-  - traefik-int.yourdomain.com
+  - traefik-ext.yourdomain.com
