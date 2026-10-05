@@ -62,9 +62,9 @@ spec:
           port: 5006
       middlewares:
         - name: default-headers
-        - name: internalapp-whitelist #Optional
-  tls:
-    secretName: prod-yourcert-tls
+          namespace: traefik-internal
+          name: internalapp-whitelist #Optional
+  tls: {}
 
 ---
 
