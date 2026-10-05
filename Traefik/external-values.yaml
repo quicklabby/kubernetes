@@ -1,0 +1,79 @@
+additionalArguments:
+  - "--global.sendanonymoususage=false"
+  - "--global.checknewversion=false"
+
+log:
+  level: INFO
+accessLog:
+  enabled: true
+
+deployment:
+  enabled: true
+  replicas: 2
+
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik-traefik-external
+
+ports:
+  web:
+    port: 80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    port: 443
+    http:
+      tls:
+        enabled: true
+
+ingressRoute:
+  dashboard:
+    enabled: false
+
+ingressClass:
+  enabled: false
+
+providers:
+  kubernetesCRD:
+    enabled: true
+    ingressClass: traefik-external
+    allowExternalNameServices: false
+    allowCrossNamespace: false
+    namespaces:
+      - plex
+      - nextcloud
+      - webtop
+      - authentik
+      - traefik-external
+      - nginx
+  kubernetesIngress:
+    enabled: false
+
+rbac:
+  enabled: true
+  namespaced: true
+
+service:
+  enabled: true
+  type: LoadBalancer
+  annotations:
+    metallb.io/address-pool: external-pool
+    metallb.io/loadBalancerIPs: ## Your Traefik LB IP for public domain applications
+  spec:
+    externalTrafficPolicy: Local
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "50Mi"
+  limits:
+    cpu: "300m"
+    memory: "256Mi"
