@@ -1,23 +1,43 @@
-### (this settings will be generated automatically by authentik, see documentation) ###
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: authentik
+  namespace: authentik
+  annotations:
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`auth.yourdomain.com`)
+      kind: Rule
+      services:
+        - name: authentik-server
+          port: 80
+      middlewares:
+        - name: authentik-headers
+  tls:
+    secretName: authentik-tls
+
+---
 
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-    name: authentik
+  name: authentik-headers
+  namespace: authentik
 spec:
-    forwardAuth:
-        address: http://ak-outpost-authentik-embedded-outpostdefault.default.svc.cluster.local:9000/outpost.goauthentik.io/auth/traefik ## your authentik outpost name with namespace, in this case default
-        trustForwardHeader: true
-        authResponseHeaders:
-            - X-authentik-username
-            - X-authentik-groups
-            - X-authentik-entitlements
-            - X-authentik-email
-            - X-authentik-name
-            - X-authentik-uid
-            - X-authentik-jwt
-            - X-authentik-meta-jwks
-            - X-authentik-meta-outpost
-            - X-authentik-meta-provider
-            - X-authentik-meta-app
-            - X-authentik-meta-version
+  headers:
+    browserXssFilter: true
+    contentTypeNosniff: true
+    forceSTSHeader: true
+    frameDeny: true
+    referrerPolicy: "no-referrer"
+    stsIncludeSubdomains: true
+    stsSeconds: 31536000
+    permissionsPolicy: "geolocation=(self), microphone=(), camera=(), fullscreen=*"
+    customRequestHeaders:
+      X-Forwarded-Proto: https
+    customResponseHeaders:
+      X-Robots-Tag: "noindex, nofollow"
+
