@@ -1,16 +1,17 @@
 additionalArguments:
   - "--serversTransport.insecureSkipVerify=true"
-  - "--log.level=DEBUG"
   - "--global.sendanonymoususage=false"
   - "--global.checknewversion=false"
+log:
+  level: INFO
+resources:
+  limits:
+    cpu: "300m"
+    memory: "256Mi"
 
 deployment:
   enabled: true
   replicas: 2
-  annotations: {}
-  podAnnotations: {}
-  additionalContainers: []
-  initContainers: []
 
 ports:
   web:
@@ -30,14 +31,20 @@ ingressRoute:
   dashboard:
     enabled: false
 
+ingressClass:
+  enabled: true
+  name: traefik-internal
+  isDefaultClass: true
+
 providers:
   kubernetesCRD:
     enabled: true
-    ingressClass: traefik-external
+    ingressClass: traefik-internal
     allowExternalNameServices: false
     allowCrossNamespace: true
   kubernetesIngress:
     enabled: true
+    ingressClass: traefik-internal
     allowExternalNameServices: false
     publishedService:
       enabled: true
@@ -49,10 +56,11 @@ service:
   enabled: true
   type: LoadBalancer
   annotations:
-    metallb.io/allow-shared-ip: traefik-unifi
+    metallb.io/address-pool: internal-pool
+    metallb.io/loadBalancerIPs: ## Your internal Traefik LB IP
+    metallb.io/allow-shared-ip: internal-services
   spec:
-    externalTrafficPolicy: Cluster ## Use Local instead of Cluster to preserves the source IP address of incoming traffic, if you want to use middleware "internalapp-whitelist"
-    loadBalancerIP: 192.168.63.50
+    externalTrafficPolicy: Cluster
 
 resources:
   requests:
