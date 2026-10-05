@@ -1,0 +1,103 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: internal-wildcard-tls
+  namespace: traefik-internal
+spec:
+  secretName: internal-wildcard-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.yourdomain.com"
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: TLSStore
+metadata:
+  name: default # Name must be default
+  namespace: traefik-internal
+spec:
+  defaultCertificate:
+    secretName: internal-wildcard-tls
+
+---
+##########################
+## Public Certificates
+##########################
+
+## For security purposes, each domain will have its own certificate and Ingress resource.
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nginx-tls
+  namespace: nginx
+spec:
+  secretName: nginx-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+  - yourdomain.com
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nextcloud-tls
+  namespace: nextcloud
+spec:
+  secretName: nextcloud-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+    - nextcloud.yourdomain.com
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: plex-tls
+  namespace: plex
+spec:
+  secretName: plex-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+  - plex.yourdomain.com
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: authentik-tls
+  namespace: authentik
+spec:
+  secretName: authentik-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+  - auth.yourdomain.com
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: traefik-tls
+  namespace: traefik-external
+spec:
+  secretName: traefik-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+  - traefik-int.yourdomain.com
