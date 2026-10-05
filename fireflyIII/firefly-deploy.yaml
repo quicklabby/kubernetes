@@ -49,21 +49,20 @@ metadata:
   name: firefly
   namespace: firefly
   annotations:
-    kubernetes.io/ingress.class: traefik-external
+    kubernetes.io/ingress.class: traefik-internal
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`actual.yourdomain.com`)
+    - match: Host(`firefly.yourdomain.com`)
       kind: Rule
       services:
         - name: firefly
           port: 5000
       middlewares:
         - name: default-headers
-        - name: internalapp-whitelist # Optional
-  tls:
-     secretName: prod-yourcert-tls
+          namespace: traefik-internal
+  tls: {}
 
 ---
 
