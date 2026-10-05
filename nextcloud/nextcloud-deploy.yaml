@@ -142,3 +142,16 @@ spec:
     permissionsPolicy: "geolocation=(self), microphone=(self), camera=(self)"
     customRequestHeaders:
       X-Forwarded-Proto: https
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: nextcloud-redirectregex
+  namespace: nextcloud
+spec:
+  redirectRegex:
+    regex: "https://your.nextcloudomain.com/.well-known/(card|cal)dav"
+    replacement: "https://your.nextcloudomain.com/remote.php/dav/"
+    permanent: true
