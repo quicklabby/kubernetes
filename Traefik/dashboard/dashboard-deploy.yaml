@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`your_internal_traefik_domain`)
+    - match: Host(`your_internal_traefik_domain`) ## This domain needs to be added to the pfSense DNS Resolver
       kind: Rulel
       middlewares:
         - name: traefik-dashboard-basicauth-int
