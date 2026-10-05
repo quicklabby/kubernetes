@@ -57,7 +57,7 @@ service:
   type: LoadBalancer
   annotations:
     metallb.io/address-pool: internal-pool
-    metallb.io/loadBalancerIPs: ## Your internal Traefik LB IP
+    metallb.io/loadBalancerIPs: ## Your Traefik LB IP for internal domain only applications
     metallb.io/allow-shared-ip: internal-services
   spec:
     externalTrafficPolicy: Cluster
