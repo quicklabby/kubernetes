@@ -58,8 +58,8 @@ kind: IngressRoute
 metadata:
   name: collabora
   namespace: default
-  annotations:
-    kubernetes.io/ingress.class: traefik-external
+  annotations: 
+    kubernetes.io/ingress.class: traefik-internal
 spec:
   entryPoints:
     - websecure
@@ -71,9 +71,8 @@ spec:
           port: 9980
       middlewares:
         - name: default-headers
-        - name: internalapp-whitelist # Optional
-  tls:
-    secretName: prod-yourcert-tls
+          namespace: traefik-internal
+  tls: {}
 
 ---
 
