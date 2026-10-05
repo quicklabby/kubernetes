@@ -63,7 +63,7 @@ spec:
       middlewares:
         - name: default-headers
           namespace: traefik-internal
-          name: internalapp-whitelist #Optional
+#          name: internalapp-whitelist #Optional
   tls: {}
 
 ---
