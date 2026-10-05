@@ -57,3 +57,27 @@ spec:
   - name: http
     targetPort: 80
     port: 8000
+
+---
+
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: heimdall
+  namespace: default
+  annotations: 
+    kubernetes.io/ingress.class: traefik-internal
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`hem.yourdomain.com`)
+      kind: Rule
+      services:
+        - name: heimdall
+          port: 8000
+      middlewares:
+        - name: default-headers
+          namespace: traefik-internal
+  tls: {}
