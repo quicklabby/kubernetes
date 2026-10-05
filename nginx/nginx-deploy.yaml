@@ -2,7 +2,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: nginx
-  namespace: default
+  namespace: nginx
   labels:
     app: nginx
   annotations: ## Add this annotations for keel ## 
@@ -38,14 +38,13 @@ spec:
           persistentVolumeClaim:
             claimName: pvc-nginx
 
-
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   name: nginx
-  namespace: default
+  namespace: nginx
 spec:
   selector:
     app: nginx
@@ -53,3 +52,46 @@ spec:
   - name: http
     targetPort: 80
     port: 80 
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nginx
+  namespace: nginx
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`yourdomain.com`)
+      kind: Rule
+      services:
+        - name: nginx
+          port: 80
+      middlewares:
+        - name: nginx-headers
+  tls:
+    secretName: nginx-tls
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: nginx-headers
+  namespace: nginx
+spec:
+  headers:
+    browserXssFilter: true
+    contentTypeNosniff: true
+    forceSTSHeader: true
+    frameDeny: true
+    referrerPolicy: "no-referrer"
+    stsIncludeSubdomains: true
+    stsSeconds: 31536000
+    customRequestHeaders:
+      X-Forwarded-Proto: https
+
