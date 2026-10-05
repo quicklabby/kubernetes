@@ -1,21 +1,66 @@
-apiVersion: traefik.containo.us/v1alpha1
+\apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: traefik-dashboard
-  namespace: traefik
+  name: traefik-dashboard-int
+  namespace: traefik-internal
+  annotations: 
+    kubernetes.io/ingress.class: traefik-internal
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`your_internal_traefik_domain`)
+      kind: Rulel
+      middlewares:
+        - name: traefik-dashboard-basicauth-int
+          namespace: traefik-internal
+      services:
+        - name: api@internal
+          kind: TraefikService
+  tls: {}
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-ext
+  namespace: traefik-external
   annotations: 
     kubernetes.io/ingress.class: traefik-external
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`your_traefik_domain`)
+    - match: Host(`your_external_traefik_domain`)
       kind: Rule
       middlewares:
-        - name: traefik-dashboard-basicauth
-          namespace: traefik
+        - name: traefik-dashboard-basicauth-ext
+          namespace: traefik-external
       services:
         - name: api@internal
           kind: TraefikService
   tls:
-    secretName: prod-domain-tls
+    secretName: traefik-tls
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-dashboard-basicauth-int
+  namespace: traefik-internal
+spec:
+  basicAuth:
+    secret: traefik-dashboard-auth-int
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-dashboard-basicauth-ext
+  namespace: traefik-external
+spec:
+  basicAuth:
+    secret: traefik-dashboard-auth-ext
