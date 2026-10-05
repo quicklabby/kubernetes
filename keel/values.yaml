@@ -42,22 +42,17 @@ service:
   port: 9300 
   targetPort: 9300
 
-
-# Traefik Ingress
 ingress:
   enabled: true
   labels: {}
-  annotations: 
+  annotations:
+    kubernetes.io/ingress.class: traefik-internal
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-default-headers@kubernetescrd
   hosts:
-    - host: keel.domain.com
+    - host: keel.yourdomain.com
       paths:
         - /
-  tls:
-    - secretName: prod-domain-tls
-      hosts:
-        - keel.domain.com
 
-# Enable DEBUG logging
 debug: true
