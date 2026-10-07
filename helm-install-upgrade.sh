@@ -2,66 +2,85 @@
 
 set +e
 
-read -p "Do you want to install or upgrade helm repo? (Type in/up)" anw
+YELLOW="\033[33m"; GREEN="\033[32m"; RED="\033[31m"; RESET="\033[0m"
 
-if [ $anw ==  in ]
-   then
-     printf "\033[33mAdding Helm repo\033[0m\n\n"    
-
-   declare -A repos=(
-     [traefik]="https://traefik.github.io/charts"
-     [jetstack]="https://charts.jetstack.io"
-     [authentik]="https://charts.goauthentik.io"
-     [argo]="https://argoproj.github.io/argo-helm"
-     [keel]="https://charts.keel.sh"
+# repo-name|url
+repos=(
+  "traefik|https://traefik.github.io/charts"
+  "jetstack|https://charts.jetstack.io"
+  "authentik|https://charts.goauthentik.io"
+  "argo|https://argoproj.github.io/argo-helm"
+  "keel|https://charts.keel.sh"
 )
 
-     for repo in "${!repos[@]}"; do
-       helm repo add "$repo" "${repos[$repo]}"
-     done
+# Namespaces to create on install. public-apps must exist BEFORE traefik-external
+# (the chart creates namespaced Roles in it).
+namespaces=(traefik-internal traefik-external kube-system cert-manager argocd)
 
-     printf "\033[33mUpdating Helm repo\033[0m\n\n"
-     helm repo update
-
-     printf "\033[33mCreating required namespaces\033[0m\n\n"
-     for helm in traefik cert-manager argocd; do kubectl create namespace $helm; done
-
-   declare -A installs=(
-    [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik" #input your value.yaml directory"
-    [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager" #input your value.yaml directory"
-    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml default" #input your value.yaml directory"
-    [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd" #input your value.yaml directory"
-    [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system" #input your value.yaml directory"
+# release chart values-file namespace [extra helm flags]
+# Order matters: the internal traefik release goes first because it owns the CRDs,
+# so the external one is installed with --skip-crds.
+releases=(
+  "traefik traefik/traefik $HOME/kubernetes/traefik/values-internal.yaml traefik-internal"
+  "traefik traefik/traefik $HOME/kubernetes/traefik/values-external.yaml traefik-external --skip-crds"
+  "cert-manager jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager"
+  "authentik authentik/authentik $HOME/kubernetes/authentik/values.yaml authentik"
+  "argocd argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd"
+  "keel keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system"
 )
 
-     for app in "${!installs[@]}"; do
-       IFS=' ' read -r chart values namespace <<< "${installs[$app]}"
-       printf "\033[33mInstalling $app...\033[0m\n\n"
-       helm install --namespace="$namespace" "$app" "$chart" -f "$values"
-     done
+run_releases() {
+  local action="$1"   # install | upgrade
+  local entry release chart values namespace extra
+  for entry in "${releases[@]}"; do
+    # shellcheck disable=SC2034
+    read -r release chart values namespace extra <<< "$entry"
+    printf "${YELLOW}%s %s (namespace: %s)...${RESET}\n\n" "$action" "$release" "$namespace"
+    if [ "$action" = "install" ]; then
+      # $extra is intentionally unquoted so it can hold flags (empty for most releases)
+      # shellcheck disable=SC2086
+      helm install --namespace="$namespace" "$release" "$chart" -f "$values" $extra
+    else
+      helm upgrade --namespace="$namespace" "$release" "$chart" -f "$values"
+    fi
+    if [ $? -ne 0 ]; then
+      printf "${RED}%s failed for %s in %s${RESET}\n\n" "$action" "$release" "$namespace"
+    fi
+  done
+}
 
-     printf "\033[32mInstall Completed\033[0m\n\n"
+read -rp "Do you want to install or upgrade helm releases? (Type in/up): " anw
 
-elif [ $anw == up ]
-   then
-     printf "\033[33Updating helm repo\033[0m\n\n"
-     helm repo update
+case "$anw" in
+  in)
+    printf "${YELLOW}Adding Helm repos${RESET}\n\n"
+    for entry in "${repos[@]}"; do
+      helm repo add "${entry%%|*}" "${entry#*|}"
+    done
 
-   declare -A upgrades=(
-    [traefik]="traefik/traefik $HOME/kubernetes/traefik/values.yaml traefik" #input your value.yaml directory"
-    [cert-manager]="jetstack/cert-manager $HOME/kubernetes/certmanager/values.yaml cert-manager" #input your value.yaml directory"
-    [authentik]="authentik/authentik $HOME/kubernetes/authentik/values.yaml default" #input your value.yaml directory"
-    [argocd]="argo/argo-cd $HOME/kubernetes/argocd/values.yaml argocd" #input your value.yaml directory"
-    [keel]="keel/keel $HOME/kubernetes/keel/keel-values.yaml kube-system" #input your value.yaml directory"
-)
+    printf "${YELLOW}Updating Helm repos${RESET}\n\n"
+    helm repo update
 
-     for app in "${!upgrades[@]}"; do
-       IFS=' ' read -r chart values namespace <<< "${upgrades[$app]}"
-       printf "\033[33mUpgrading $app...\033[0m\n\n"
-       helm upgrade --namespace="$namespace" "$app" "$chart" -f "$values"
-     done
+    printf "${YELLOW}Creating required namespaces${RESET}\n\n"
+    for ns in "${namespaces[@]}"; do
+      # idempotent: no error if the namespace already exists
+      kubectl create namespace "$ns" --dry-run=client -o yaml | kubectl apply -f -
+    done
 
-else
-	echo "Please type in (install) or up (upgrade)"	
-fi
+    run_releases install
+    printf "${GREEN}Install completed${RESET}\n\n"
+    ;;
+  up)
+    printf "${YELLOW}Updating Helm repos${RESET}\n\n"
+    helm repo update
+
+    run_releases upgrade
+    printf "${GREEN}Upgrade completed${RESET}\n\n"
+    ;;
+  *)
+    echo "Please type 'in' (install) or 'up' (upgrade)"
+    exit 1
+    ;;
+esac
+
 
