@@ -86,6 +86,7 @@ Each instance has its own Helm release, namespace, configuration, routing scope,
 Traffic from the Internet is handled through pfSense, which forwards external traffic to the appropriate MetalLB address and Traefik instance.
 
 
+
 **Architecture Overview**
 
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/3ba303da-7cee-41b8-a46d-83455f780127" />
