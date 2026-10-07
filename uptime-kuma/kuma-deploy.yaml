@@ -50,3 +50,26 @@ spec:
   - name: http
     targetPort: 3001
     port: 3001
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: uptime-kuma
+  namespace: monitoring
+  annotations: 
+    kubernetes.io/ingress.class: traefik-internal
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`kuma.yourdomain.com)
+      kind: Rule
+      services:
+        - name: uptime-kuma
+          port: 3001
+      middlewares:
+        - name: default-headers
+          namespace: traefik-internal
+  tls: {}
