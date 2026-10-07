@@ -72,7 +72,7 @@ CI/CD
 - ArgoCD
 
 
-## Traefik
+## Reverse Proxy
 
 The cluster runs two independent Traefik instances in separate namespaces, providing a clear separation between externally exposed and internal services.
 
