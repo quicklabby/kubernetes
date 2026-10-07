@@ -71,6 +71,60 @@ Monitoring/Logs:
 CI/CD
 - ArgoCD
 
+
+**Traefik**
+
+The cluster runs two independent Traefik instances in separate namespaces, providing a clear separation between externally exposed and internal services.
+
+- Traefik External — handles public-facing services through the external network and MetalLB address pool. Each public domain must be declared declaratively in the Traefik configuration to use   the appropriate SSL/TLS certificate.
+
+- Traefik Internal — handles services intended for the internal network through a dedicated MetalLB address pool.
+
+Each instance has its own Helm release, namespace, configuration, routing scope, and LoadBalancer IP. This separation provides better isolation, clearer traffic boundaries, and independent management of internal and external ingress traffic.
+
+Traffic from the Internet is handled through pfSense, which forwards external traffic to the appropriate MetalLB address and Traefik instance.
+
+
+**Architecture Overview**
+
+                              Internet
+                                  │
+                                  ▼
+                         ┌─────────────────┐
+                         │     pfSense     │
+                         │ Firewall / NAT  │
+                         │  DNS / Routing  │
+                         └────────┬────────┘
+                                  │
+                         External network
+                                  │
+                                  ▼
+                        MetalLB external IP
+                                  │
+                         ┌──────────────────┐
+                         │ traefik-external │
+                         │    namespace     │
+                         └────────┬─────────┘
+                                  │
+                    ┌─────────────┼─────────────┐
+                    ▼             ▼             ▼
+                  plex        nextcloud      authentik
+                  nginx        webtop          ...
+
+
+                         Internal network
+                                  │
+                                  ▼
+                        MetalLB internal IP
+                                  │
+                         ┌──────────────────┐
+                         │ traefik-internal │
+                         │    namespace     │
+                         └────────┬─────────┘
+                                  │
+                         internal applications
+
+
 ----------------------------
 
 ## Automated K3s Deployment: Install/Upgrade and Uninstall via Ansible Playbooks:
@@ -128,9 +182,9 @@ Step 3:
 
 2. ```helm repo update``` 
 
-3. ```kubectl create namespace traefik```
+3. ```helm install  --namespace traefik-external --create-namespace traefik-external traefik/traefik -f external-values.yaml``` 
 
-4. ```helm install --namespace=traefik traefik traefik/traefik -f values.yaml``` 
+4. ```helm install  --namespace traefik-internal --create-namespace traefik-internal traefik/traefik -f internal-values.yaml --skip-crds``` 
    
 https://artifacthub.io/packages/helm/traefik/traefik
 
