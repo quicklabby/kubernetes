@@ -63,16 +63,11 @@ spec:
           requests:
             memory: "1200Mi" 
         volumeMounts: 
-        - name: config
-          mountPath: /config
         - name: media
           mountPath: /hdd
         - name: tmp
           mountPath: /temporary
       volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: pvc-plex-database
         - name: media
           persistentVolumeClaim:
             claimName: pvc-plex-media
@@ -94,3 +89,49 @@ spec:
   - name: http
     targetPort: 32400
     port: 32400
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: plex
+  namespace: plex
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`plex.yourdomain.com`)
+      kind: Rule
+      services:
+        - name: plex
+          port: 32400
+      middlewares:
+        - name: plex-headers
+  tls:
+    secretName: plex-tls
+
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: plex-headers
+  namespace: plex
+spec:
+  headers:
+    browserXssFilter: true
+    contentTypeNosniff: true
+    forceSTSHeader: true
+    frameDeny: true
+    referrerPolicy: "no-referrer"
+    stsIncludeSubdomains: true
+    stsSeconds: 31536000
+    permissionsPolicy: "geolocation=(self), microphone=(), camera=(), fullscreen=*"
+    customRequestHeaders:
+      X-Forwarded-Proto: https
+    customResponseHeaders:
+      X-Robots-Tag: "noindex, nofollow"
+
