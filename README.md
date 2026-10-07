@@ -72,6 +72,7 @@ CI/CD
 - ArgoCD
 
 
+
 **Traefik**
 
 The cluster runs two independent Traefik instances in separate namespaces, providing a clear separation between externally exposed and internal services.
