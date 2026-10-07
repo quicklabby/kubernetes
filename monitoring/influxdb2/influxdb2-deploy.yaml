@@ -45,8 +45,8 @@ spec:
   selector:
     app: influxdb
   ports:
-  - name: http
-    targetPort: 8086
+  - targetPort: 8086
     port: 8086
-  externalIPs:
-    - ##Traefik_ingress_IP
+    protocol: TCP
+  type: ClusterIP
+
