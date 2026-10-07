@@ -102,7 +102,7 @@ spec:
       - name: apconfig
         nfs:
           server: ##NFS server_volume_IP or PV/PVC config
-          path: /unifi/persistant/volume/path
+          path: # /unifi/persistant/volume/path
 
 ---
 
@@ -112,7 +112,8 @@ metadata:
   name: unifi
   namespace: unifi
   annotations:
-    metallb.io/allow-shared-ip: traefik-unifi
+    metallb.io/address-pool: internal-pool
+    metallb.io/allow-shared-ip: internal-services
 spec:
   type: LoadBalancer
   loadBalancerIP: ## Same traefik IP assignedn by metallb
@@ -148,16 +149,15 @@ spec:
       port: 5514
       protocol: UDP
 
-
 ---
 
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: unifi
-  namespace: default
-  annotations: 
-    kubernetes.io/ingress.class: traefik-external
+  namespace: unifi
+  annotations:
+    kubernetes.io/ingress.class: traefik-internal
 spec:
   entryPoints:
     - websecure
@@ -167,9 +167,20 @@ spec:
       services:
         - name: unifi
           port: 8443
-          passHostHeader: true ##add this to avoid issue with port 8443 and TLS not matching
-          scheme: https ##add this to avoid issue with port 8443 and TLS not matching
+          passHostHeader: true
+          scheme: https
+          serversTransport: unifi-transport
       middlewares:
         - name: default-headers
-  tls:
-    secretName: prod-domain-tls
+          namespace: traefik-internal
+  tls: {}
+
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: unifi-transport
+  namespace: unifi
+spec:
+  insecureSkipVerify: true
