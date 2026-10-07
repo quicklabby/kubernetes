@@ -88,7 +88,8 @@ Traffic from the Internet is handled by pfSense, which forwards external traffic
 
 ## Architecture Overview
 
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/3ba303da-7cee-41b8-a46d-83455f780127" />
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/4a27d01c-f228-4e29-ae32-63f1dd2c2d76" />
+
 
 
 
