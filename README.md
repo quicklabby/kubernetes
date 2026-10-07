@@ -88,42 +88,8 @@ Traffic from the Internet is handled through pfSense, which forwards external tr
 
 **Architecture Overview**
 
-                              Internet
-                                  │
-                                  ▼
-                         ┌─────────────────┐
-                         │     pfSense     │
-                         │ Firewall / NAT  │
-                         │  DNS / Routing  │
-                         └────────┬────────┘
-                                  │
-                         External network
-                                  │
-                                  ▼
-                        MetalLB external IP
-                                  │
-                         ┌──────────────────┐
-                         │ traefik-external │
-                         │    namespace     │
-                         └────────┬─────────┘
-                                  │
-                    ┌─────────────┼─────────────┐
-                    ▼             ▼             ▼
-                  plex        nextcloud      authentik
-                  nginx        webtop          ...
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/3ba303da-7cee-41b8-a46d-83455f780127" />
 
-
-                         Internal network
-                                  │
-                                  ▼
-                        MetalLB internal IP
-                                  │
-                         ┌──────────────────┐
-                         │ traefik-internal │
-                         │    namespace     │
-                         └────────┬─────────┘
-                                  │
-                         internal applications
 
 
 ----------------------------
