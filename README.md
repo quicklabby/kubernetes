@@ -92,7 +92,7 @@ Traffic from the Internet is handled by pfSense, which forwards external traffic
 
 
 
-----------------------------
+
 
 ## Automated K3s Deployment: Install/Upgrade and Uninstall via Ansible Playbooks:
 
