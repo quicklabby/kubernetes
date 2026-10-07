@@ -79,3 +79,26 @@ spec:
     - name: http
       targetPort: 3000
       port: 4000
+      
+---
+
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana
+  namespace: monitoring
+  annotations: 
+    kubernetes.io/ingress.class: traefik-internal
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`grafana.yourdomain.com`)
+      kind: Rule
+      services:
+        - name: grafana
+          port: 4000
+      middlewares:
+        - name: default-headers
+          namespace: traefik-internal
+  tls: {}
