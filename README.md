@@ -72,22 +72,21 @@ CI/CD
 - ArgoCD
 
 
-
-**Traefik**
+## Traefik
 
 The cluster runs two independent Traefik instances in separate namespaces, providing a clear separation between externally exposed and internal services.
 
-- Traefik External — handles public-facing services through the external network and MetalLB address pool. Each public domain must be declared declaratively in the Traefik configuration to use   the appropriate SSL/TLS certificate.
+- **Traefik External** — handles public-facing services through the external network and dedicated MetalLB address pool. Public domains are configured through Kubernetes resources and routed to the appropriate services using the required SSL/TLS certificates.
 
-- Traefik Internal — handles services intended for the internal network through a dedicated MetalLB address pool.
+- **Traefik Internal** — handles services intended for the internal network through a dedicated MetalLB address pool.
 
 Each instance has its own Helm release, namespace, configuration, routing scope, and LoadBalancer IP. This separation provides better isolation, clearer traffic boundaries, and independent management of internal and external ingress traffic.
 
-Traffic from the Internet is handled through pfSense, which forwards external traffic to the appropriate MetalLB address and Traefik instance.
+Traffic from the Internet is handled by pfSense, which forwards external traffic to the appropriate MetalLB address and Traefik instance.
 
 
 
-**Architecture Overview**
+## Architecture Overview
 
 <img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/3ba303da-7cee-41b8-a46d-83455f780127" />
 
