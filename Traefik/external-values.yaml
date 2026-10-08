@@ -50,7 +50,6 @@ providers:
     namespaces:
       - plex
       - nextcloud
-      - webtop
       - authentik
       - traefik-external
       - nginx
