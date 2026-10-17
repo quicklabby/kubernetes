@@ -15,10 +15,17 @@ topologySpreadConstraints:
   - maxSkew: 1
     topologyKey: kubernetes.io/hostname
     whenUnsatisfiable: DoNotSchedule
+    nodeTaintsPolicy: Honor
     labelSelector:
       matchLabels:
         app.kubernetes.io/name: traefik
         app.kubernetes.io/instance: traefik-traefik-external
+
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 0
 
 ports:
   web:
