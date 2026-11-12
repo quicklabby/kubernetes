@@ -69,11 +69,11 @@ rbac:
 
 service:
   enabled: true
-  type: LoadBalancer
   annotations:
     metallb.io/address-pool: external-pool
     metallb.io/loadBalancerIPs: ## Your Traefik LB IP for public domain applications
   spec:
+    type: LoadBalancer
     externalTrafficPolicy: Local
 
 resources:
