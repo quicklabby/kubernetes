@@ -53,7 +53,7 @@ rbac:
   enabled: true
 
 service:
-  enabled: truer
+  enabled: true
   annotations:
     metallb.io/address-pool: internal-pool
     metallb.io/loadBalancerIPs: ## Your Traefik LB IP for internal domain only applications
