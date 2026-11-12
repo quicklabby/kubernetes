@@ -53,13 +53,13 @@ rbac:
   enabled: true
 
 service:
-  enabled: true
-  type: LoadBalancer
+  enabled: truer
   annotations:
     metallb.io/address-pool: internal-pool
     metallb.io/loadBalancerIPs: ## Your Traefik LB IP for internal domain only applications
     metallb.io/allow-shared-ip: internal-services
   spec:
+    type: LoadBalancer
     externalTrafficPolicy: Cluster
 
 resources:
